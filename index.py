@@ -113,9 +113,61 @@ class Ecosystem:
         """Print grid"""
         # Iterate over grid
         for row in self.grid:
-            print(row)
+            for element in row:
+                print(element, end="")
+            print()
 
-    
+    # Function to search food
+    def search(self, player):
+        """Perform grid search to locate food nearest to player"""
+        # Initialise limits for searching
+        x_low = None
+        y_low = None
+        x_high = None
+        y_high = None
+
+        # Array to hold all cells already searched
+        old = []
+
+        # Initialise search radius
+        searchRadius = 0
+
+        # Flag to indicate status of search
+        found = False
+
+        # Initialising food location
+        foodLocation = None
+
+        # Perform grid search to locate food
+        while not found:
+            # Update search radius
+            searchRadius = searchRadius + 1
+            # Check if all cells have been searched
+            if (self.gridSize-1, self.gridSize-1) in old:
+                if (0, 0) in old:
+                    break
+            else:
+                # Get limiting cell coordinates for given search radius
+                x_low = player["pos"][0]-searchRadius if player["pos"][0]-searchRadius > 0 else 0
+                y_low = player["pos"][1]-searchRadius if player["pos"][1]-searchRadius > 0 else 0
+
+                x_high = player["pos"][0]+searchRadius if player["pos"][0]+searchRadius < self.gridSize-1 else self.gridSize-1
+                y_high = player["pos"][1]+searchRadius if player["pos"][1]+searchRadius < self.gridSize-1 else self.gridSize-1
+
+                # Search all cells in guven search radius
+                for j in range(x_low, x_high+1):
+                    for k in range(y_low, y_high+1):
+                        # If cell was searched before, ignore it
+                        if (j, k) in old:
+                            break
+                        elif self.grid[j][k] == 'F':
+                            found=True
+                            foodLocation = (j, k)
+                            break
+                    if found:
+                        break
+        # Return the food location
+        return foodLocation
 
 eco = Ecosystem()
 eco.initialiseFood()
