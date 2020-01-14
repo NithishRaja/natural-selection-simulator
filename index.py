@@ -12,9 +12,9 @@ from search import Search
 
 # Initialise class
 class Ecosystem:
-    # Function to initialse ecosystem
+    # Function to initialise ecosystem
     def __init__(self):
-        """Initialse grid and starting players"""
+        """Initialise grid and starting players"""
 
         # Initialise grid
         self.grid = []
@@ -28,7 +28,7 @@ class Ecosystem:
         # Set no of players
         self.noOfPlayers = 2
 
-        # Initialse player id counter
+        # Initialise player id counter
         self.playerIdCounter = 0
 
         # Initialise array to hold food locations
@@ -40,15 +40,15 @@ class Ecosystem:
         # Call function to initialise grid
         self.initialiseGrid()
 
-        # Call function to initialse players
+        # Call function to initialise players
         self.initialisePlayers()
 
         # Update grid to reflect new players
         self.updateGrid()
 
-    # Function to initialse grid and set players
+    # Function to initialise grid and set players
     def initialiseGrid(self):
-        """Initialse grid positions with 0 and place players on grid"""
+        """Initialise grid positions with 0 and place players on grid"""
         # Iterate over grid
         for i in range(self.gridSize):
             self.grid.append([])
@@ -88,7 +88,7 @@ class Ecosystem:
         keyword arguments:
         food -- flag mentioning location for food or for player
         """
-        # Initialse array to hold position
+        # Initialise array to hold position
         pos = [None, None]
         # Get starting location for new player
         while True:
