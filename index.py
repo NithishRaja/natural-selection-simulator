@@ -5,6 +5,7 @@
 
 # Dependencies
 from random import randint
+import threading
 
 # Initialise class
 class Ecosystem:
@@ -79,7 +80,11 @@ class Ecosystem:
 
     # Function to assign an empty cell along edge to players
     def getNewPosition(self, food=False):
-        """Return position of an empty cell along the edges of the grid"""
+        """Return position of an empty cell along the edges of the grid
+
+        keyword arguments:
+        food -- flag mentioning location for food or for player
+        """
         # Initialse array to hold position
         pos = [None, None]
         # Get starting location for new player
@@ -119,7 +124,11 @@ class Ecosystem:
 
     # Function to search food
     def search(self, player):
-        """Perform grid search to locate food nearest to player"""
+        """Perform grid search to locate food nearest to player
+
+        Keyword arguments:
+        player -- a dict with id and position
+        """
         # Initialise limits for searching
         x_low = None
         y_low = None
@@ -167,8 +176,19 @@ class Ecosystem:
                     if found:
                         break
         # Return the food location
-        return foodLocation
+        # return foodLocation
+        print("player position: ", player["pos"], " closest food location: ", foodLocation)
+
+    # Start function
+    def start(self):
+        """Initialise thread for each player and start thread"""
+        # Iterate over players
+        for player in self.players:
+            newThread = threading.Thread(target=self.search, args=[player])
+            newThread.start()
+
 
 eco = Ecosystem()
 eco.initialiseFood()
 eco.displayGrid()
+eco.start()
