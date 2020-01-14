@@ -1,3 +1,5 @@
-# Test file
+# Ignore test files
+test*.py
 
-test.py
+# Ignore pycache
+__pycache__

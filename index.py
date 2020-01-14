@@ -7,6 +7,9 @@
 from random import randint
 import threading
 
+# Local dependencies
+from search import Search
+
 # Initialise class
 class Ecosystem:
     # Function to initialse ecosystem
@@ -184,7 +187,8 @@ class Ecosystem:
         """Initialise thread for each player and start thread"""
         # Iterate over players
         for player in self.players:
-            newThread = threading.Thread(target=self.search, args=[player])
+            locate = Search(self.grid, player["pos"], 'F')
+            newThread = threading.Thread(target=locate.start)
             newThread.start()
 
 
