@@ -23,7 +23,7 @@ class Ecosystem:
         self.gridSize = 10
 
         # Initialise players
-        self.players = []
+        self.players = {}
 
         # Set no of players
         self.noOfPlayers = 2
@@ -62,10 +62,11 @@ class Ecosystem:
         for i in range(self.noOfPlayers):
             pos = self.getNewPosition()
             # Set id and starting position for all players
-            self.players.append({
+            self.players[str(self.playerIdCounter)] = {
                 "id" : self.playerIdCounter,
-                "pos" : tuple(pos)
-            })
+                "pos" : tuple(pos),
+                "target" : None
+            }
             # Update player id number
             self.playerIdCounter = self.playerIdCounter + 1
 
@@ -96,7 +97,6 @@ class Ecosystem:
                 pos[0] = randint(1, self.gridSize-2)
                 pos[1] = randint(1, self.gridSize-2)
             else:
-                # Get new positions
                 pos[0] = randint(0, self.gridSize-1)
                 pos[1] = randint(0, 1)*(self.gridSize-1)
                 # Reverse position of list to allow players to start along y axis
@@ -113,8 +113,8 @@ class Ecosystem:
         # Remove all food
         self.food = []
         # Update grid to display all players
-        for plyr in self.players:
-            self.grid[plyr["pos"][0]][plyr["pos"][1]] = 'P'
+        for playerId in self.players.keys():
+            self.grid[self.players[playerId]["pos"][0]][self.players[playerId]["pos"][1]] = 'P'
 
     # Function to display grid
     def displayGrid(self):
@@ -129,11 +129,10 @@ class Ecosystem:
     def start(self):
         """Initialise thread for each player and start thread"""
         # Iterate over players
-        for player in self.players:
-            locate = Search(self.grid, player["pos"], 'F')
+        for playerId in self.players.keys():
+            locate = Search(self.grid, self.players[playerId]["pos"], 'F')
             newThread = threading.Thread(target=locate.start)
             newThread.start()
-
 
 eco = Ecosystem()
 eco.initialiseFood()
