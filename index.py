@@ -5,6 +5,7 @@
 
 # Dependencies
 from random import randint
+from time import sleep
 import threading
 
 # Local dependencies
@@ -180,15 +181,16 @@ class Ecosystem:
         for playerId in self.players.keys():
             newThread = threading.Thread(target=self.movePlayer, args=[playerId])
             newThread.start()
-            newThread.join()
 
 eco = Ecosystem()
 eco.initialiseFood()
 eco.displayGrid()
 eco.start()
 print("---")
+# Wait for threads to finish execution
+while threading.active_count() > 1:
+    sleep(3)
 # Update Grid with new positions
 eco.updateGrid()
-print("---")
 eco.displayGrid()
 print("---")
