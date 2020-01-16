@@ -66,7 +66,9 @@ class Ecosystem:
             self.players[str(self.playerIdCounter)] = {
                 "id" : self.playerIdCounter,
                 "pos" : tuple(pos),
-                "target" : None
+                "target" : None,
+                "food" : 0,
+                "noOfSteps" : 8
             }
             # Update player id number
             self.playerIdCounter = self.playerIdCounter + 1
@@ -149,28 +151,36 @@ class Ecosystem:
         lock = threading.RLock()
         lock.acquire()
 
-        # Initialise search object
-        search = Search(self.grid, self.players[playerId]["pos"], 'F')
-        # Get and update player target
-        self.players[playerId]["target"] = search.start()
+        for i in range(self.players[playerId]["noOfSteps"]):
+            # Initialise search object
+            search = Search(self.grid, self.players[playerId]["pos"], 'F')
+            # Get and update player target
+            self.players[playerId]["target"] = search.start()
 
-        # Move player towards target
-        new_x = self.players[playerId]["pos"][0]
-        new_y = self.players[playerId]["pos"][1]
+            # Move player towards target
+            new_x = self.players[playerId]["pos"][0]
+            new_y = self.players[playerId]["pos"][1]
 
-        # calculate new position
-        if self.players[playerId]["pos"][0] > self.players[playerId]["target"][0]:
-            new_x = self.players[playerId]["pos"][0]-1
-        elif self.players[playerId]["pos"][0] < self.players[playerId]["target"][0]:
-            new_x = self.players[playerId]["pos"][0]+1
+            # calculate new position
+            if self.players[playerId]["pos"][0] > self.players[playerId]["target"][0]:
+                new_x = self.players[playerId]["pos"][0]-1
+            elif self.players[playerId]["pos"][0] < self.players[playerId]["target"][0]:
+                new_x = self.players[playerId]["pos"][0]+1
 
-        if self.players[playerId]["pos"][1] > self.players[playerId]["target"][1]:
-            new_y = self.players[playerId]["pos"][1]-1
-        elif self.players[playerId]["pos"][1] < self.players[playerId]["target"][1]:
-            new_y = self.players[playerId]["pos"][1]+1
+            if self.players[playerId]["pos"][1] > self.players[playerId]["target"][1]:
+                new_y = self.players[playerId]["pos"][1]-1
+            elif self.players[playerId]["pos"][1] < self.players[playerId]["target"][1]:
+                new_y = self.players[playerId]["pos"][1]+1
 
-        # Update player position
-        self.players[playerId]["pos"] = (new_x, new_y)
+            # Update player position
+            self.players[playerId]["pos"] = (new_x, new_y)
+
+            # Check if player reached target
+            if self.players[playerId]["pos"] == self.players[playerId]["target"]:
+                # Target reached food, update flag count
+                self.players[playerId]["food"] = self.players[playerId]["food"] + 1
+                # Exit loop
+                break
 
         lock.release()
 
