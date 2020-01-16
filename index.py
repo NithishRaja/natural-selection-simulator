@@ -32,9 +32,6 @@ class Ecosystem:
         # Initialise player id counter
         self.playerIdCounter = 0
 
-        # Initialise array to hold food locations
-        self.food = []
-
         # Set food limit
         self.foodLimit = 10
 
@@ -83,8 +80,6 @@ class Ecosystem:
         for i in range(self.foodLimit):
             # Get new position for food
             pos = self.getNewPosition(food=True)
-            # Append position to food array
-            self.food.append(pos)
             # Update grid
             self.grid[pos[0]][pos[1]] = 'F'
 
@@ -119,9 +114,15 @@ class Ecosystem:
         # Get lock for grid
         lock = threading.RLock()
         lock.acquire()
+        # Initialise variable to hold food coordinates
+        food = []
         # Set all cell to 0
         for i in range(self.gridSize):
             for j in range(self.gridSize):
+                # Store food coordinates
+                if self.grid[i][j] == 'F':
+                    food.append((i, j))
+                # Mark boundaires as home
                 if i == 0:
                     self.grid[i][j] = 'H'
                 elif i == self.gridSize-1:
@@ -134,8 +135,8 @@ class Ecosystem:
                     self.grid[i][j] = 0
 
         # Set food locations
-        for food in self.food:
-            self.grid[food[0]][food[1]] = 'F'
+        for foodItem in food:
+            self.grid[foodItem[0]][foodItem[1]] = 'F'
 
         # Update grid to display all players
         for playerId in self.players.keys():
@@ -187,20 +188,22 @@ class Ecosystem:
             # Update player position
             self.players[playerId]["pos"] = (new_x, new_y)
 
-            print(playerId, self.players[playerId]["target"])
-
             # Check if player reached target
             if self.players[playerId]["pos"] == self.players[playerId]["target"]["coordinates"]:
                 # Check if target is food
                 if self.players[playerId]["target"]["name"] == 'F':
                     # Update food count
                     self.players[playerId]["food"] = self.players[playerId]["food"] + 1
+                    # Remove food from cell
+                    self.grid[new_x][new_y] = 0
                     # Switch target to home
                     self.players[playerId]["target"]["name"] = 'H'
                 # Check if target is home
                 elif self.players[playerId]["target"]["name"] == 'H':
                         # Exit loop
                         break
+
+        self.updateGrid()
 
         lock.release()
 
