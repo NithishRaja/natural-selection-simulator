@@ -105,16 +105,29 @@ class Ecosystem:
             # Check if new position is empty
             if self.grid[pos[0]][pos[1]] == 0:
                 break
-        return pos
+        return tuple(pos)
 
     # Function to add player locations to grid
     def updateGrid(self):
         """Reset cells in grid and set player locations"""
-        # Remove all food
-        self.food = []
+        # Get lock for grid
+        lock = threading.RLock()
+        lock.acquire()
+        # Set all cell to 0
+        for i in range(self.gridSize):
+            for j in range(self.gridSize):
+                self.grid[i][j] = 0
+
+        # Set food locations
+        for food in self.food:
+            self.grid[food[0]][food[1]] = 'F'
+
         # Update grid to display all players
         for playerId in self.players.keys():
             self.grid[self.players[playerId]["pos"][0]][self.players[playerId]["pos"][1]] = 'P'
+
+        # Release lock on grid
+        lock.release()
 
     # Function to display grid
     def displayGrid(self):
@@ -125,16 +138,57 @@ class Ecosystem:
                 print(element, end="")
             print()
 
+    # Function to move player
+    def movePlayer(self, playerId):
+        """Get target and move player one step closer to target
+
+        Keyword arguments:
+        playerId -- String to identify each player"""
+        # Get lock for grid
+        lock = threading.RLock()
+        lock.acquire()
+
+        # Initialise search object
+        search = Search(self.grid, self.players[playerId]["pos"], 'F')
+        # Get and update player target
+        self.players[playerId]["target"] = search.start()
+
+        # Move player towards target
+        new_x = self.players[playerId]["pos"][0]
+        new_y = self.players[playerId]["pos"][1]
+
+        # calculate new position
+        if self.players[playerId]["pos"][0] > self.players[playerId]["target"][0]:
+            new_x = self.players[playerId]["pos"][0]-1
+        elif self.players[playerId]["pos"][0] < self.players[playerId]["target"][0]:
+            new_x = self.players[playerId]["pos"][0]+1
+
+        if self.players[playerId]["pos"][1] > self.players[playerId]["target"][1]:
+            new_y = self.players[playerId]["pos"][1]-1
+        elif self.players[playerId]["pos"][1] < self.players[playerId]["target"][1]:
+            new_y = self.players[playerId]["pos"][1]+1
+
+        # Update player position
+        self.players[playerId]["pos"] = (new_x, new_y)
+
+        lock.release()
+
     # Start function
     def start(self):
         """Initialise thread for each player and start thread"""
         # Iterate over players
         for playerId in self.players.keys():
-            locate = Search(self.grid, self.players[playerId]["pos"], 'F')
-            newThread = threading.Thread(target=locate.start)
+            newThread = threading.Thread(target=self.movePlayer, args=[playerId])
             newThread.start()
+            newThread.join()
 
 eco = Ecosystem()
 eco.initialiseFood()
 eco.displayGrid()
 eco.start()
+print("---")
+# Update Grid with new positions
+eco.updateGrid()
+print("---")
+eco.displayGrid()
+print("---")

@@ -79,5 +79,5 @@ class Search:
                     if found:
                         break
         # Return the food location
-        # return foodLocation
-        print("player position: ", self.startingPoint, " closest food location: ", foodLocation)
+        # print("player position: ", self.startingPoint, " closest food location: ", foodLocation)
+        return foodLocation
