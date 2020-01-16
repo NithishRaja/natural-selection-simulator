@@ -72,7 +72,7 @@ class Search:
                         # If cell was searched before, ignore it
                         if (j, k) in old:
                             break
-                        elif self.grid[j][k] == 'F':
+                        elif self.grid[j][k] == self.searchTarget:
                             found=True
                             foodLocation = (j, k)
                             break

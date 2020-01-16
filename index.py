@@ -66,7 +66,10 @@ class Ecosystem:
             self.players[str(self.playerIdCounter)] = {
                 "id" : self.playerIdCounter,
                 "pos" : tuple(pos),
-                "target" : None,
+                "target" : {
+                    "name" : 'F',
+                    "coordinates": None
+                },
                 "food" : 0,
                 "noOfSteps" : 8
             }
@@ -119,7 +122,16 @@ class Ecosystem:
         # Set all cell to 0
         for i in range(self.gridSize):
             for j in range(self.gridSize):
-                self.grid[i][j] = 0
+                if i == 0:
+                    self.grid[i][j] = 'H'
+                elif i == self.gridSize-1:
+                    self.grid[i][j] = 'H'
+                elif j == 0:
+                    self.grid[i][j] = 'H'
+                elif j == self.gridSize-1:
+                    self.grid[i][j] = 'H'
+                else:
+                    self.grid[i][j] = 0
 
         # Set food locations
         for food in self.food:
@@ -153,12 +165,9 @@ class Ecosystem:
 
         for i in range(self.players[playerId]["noOfSteps"]):
             # Initialise search object
-            search = Search(self.grid, self.players[playerId]["pos"], 'F')
+            search = Search(self.grid, self.players[playerId]["pos"], self.players[playerId]["target"]["name"])
             # Get and update player target
-            self.players[playerId]["target"] = {
-                "name" : "food",
-                "coordinates" : search.start()
-            }
+            self.players[playerId]["target"]["coordinates"] = search.start()
 
             # Move player towards target
             new_x = self.players[playerId]["pos"][0]
@@ -178,17 +187,20 @@ class Ecosystem:
             # Update player position
             self.players[playerId]["pos"] = (new_x, new_y)
 
+            print(playerId, self.players[playerId]["target"])
+
             # Check if player reached target
             if self.players[playerId]["pos"] == self.players[playerId]["target"]["coordinates"]:
                 # Check if target is food
-                if self.players[playerId]["target"]["name"] == "food":
+                if self.players[playerId]["target"]["name"] == 'F':
                     # Update food count
                     self.players[playerId]["food"] = self.players[playerId]["food"] + 1
-                    # TODO: Set target to home
+                    # Switch target to home
+                    self.players[playerId]["target"]["name"] = 'H'
                 # Check if target is home
-                elif self.players[playerId]["target"]["name"] == "home":
-                    # Exit loop
-                    break
+                elif self.players[playerId]["target"]["name"] == 'H':
+                        # Exit loop
+                        break
 
         lock.release()
 
