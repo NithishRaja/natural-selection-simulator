@@ -22,7 +22,8 @@ class Player:
         """Set target for player.
 
         Keyword arguments:
-        target -- tuple with x and y coordinates"""
+        target -- tuple with x and y coordinates
+        """
         # Check if target is a tuple
         if type(target) == type(tuple([1, 2])):
             # Set current target

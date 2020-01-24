@@ -40,7 +40,8 @@ class Grid:
         Initialise grid with empty cells if initial flag is set to True.
 
         Keyword arguments:
-        initial -- Flag to perform initialisation or not"""
+        initial -- Flag to perform initialisation or not
+        """
         # Check if initial flag is set to True
         if initial:
             # Set grid to empty array

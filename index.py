@@ -159,7 +159,8 @@ class Ecosystem:
         """Get target and move player one step closer to target
 
         Keyword arguments:
-        playerId -- String to identify each player"""
+        playerId -- String to identify each player
+        """
         # Get lock for grid
         lock = threading.RLock()
         lock.acquire()
