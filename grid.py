@@ -60,7 +60,7 @@ class Grid:
                         self.grid[i].append('H')
                     else:
                         # Fill cell with zeros
-                        self.grid[i].append(None)
+                        self.grid[i].append('0')
         else:
             # Iterate over grid
             for i in range(1, self.gridSize-1):
@@ -68,7 +68,7 @@ class Grid:
                     # Check if cell has food
                     if type(self.grid[i][j]) == type("str") and self.grid[i][j] == 'F':
                         # Empty cell
-                        self.grid[i][j] = None
+                        self.grid[i][j] = '0'
 
     # Function to randomly set food in cells
     def initialiseFood(self):
@@ -79,7 +79,7 @@ class Grid:
             x = randint(1, self.gridSize-2)
             y = randint(1, self.gridSize-2)
             # Check if cell is empty
-            if self.grid[x][y] == None:
+            if self.grid[x][y] == '0':
                 # Place food in empty cell
                 self.grid[x][y] = 'F'
                 # Update food count
@@ -87,7 +87,24 @@ class Grid:
 
     # Function to return grid
     def getGrid(self):
-        """Return the grid."""
+        """Return a snapshot of the actual grid."""
+        # initialise variable to hold snapshot of grid
+        snapshot = []
+        # Iterate over grid
+        for i in range(self.gridSize):
+            snapshot.append([])
+            # Iterate over each element in row
+            for j in range(self.gridSize):
+                # Check if element in current cell is a string
+                if type(self.grid[i][j]) == type("a"):
+                    # Update snapshot with element in current cell
+                    snapshot[i].append(self.grid[i][j])
+                else:
+                    # If element in current cell is not a string, it is a player object
+                    snapshot[i].append('P')
+        # Return snapshot
+        return snapshot
+
         return self.grid
 
     # Function to display grid
