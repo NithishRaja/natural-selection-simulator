@@ -105,16 +105,13 @@ class Grid:
         # Return snapshot
         return snapshot
 
-        return self.grid
-
     # Function to display grid
     def displayGrid(self):
-        """Iterate over grid and print it as a matrix."""
-        # Iterate over each row in grid
-        for row in self.grid:
-            # Iterate over each element in row
+        """Get a snapshot of grid and print it."""
+        # Call function to get snapshot
+        snapshot = self.getGrid()
+        # Iterate over snapshot and print each element
+        for row in snapshot:
             for elem in row:
-                # Print element without '\n'
-                print("  "+str(elem)+"  ", end="")
-            # Move cursor to next line
+                print(elem, end="")
             print()
