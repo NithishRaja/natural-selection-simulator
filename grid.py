@@ -115,3 +115,29 @@ class Grid:
             for elem in row:
                 print(elem, end="")
             print()
+
+    # Function to place new player along edges
+    def playerStart(self, player):
+        """Place a player along the edgesself.
+
+        Keyword arguments:
+        player -- player object
+        """
+        # Get snapshot of grid
+        snapshot = self.getGrid()
+        # Initialise variable to hold start position
+        coords = None
+        # Get a starting position for player
+        while True:
+            if randint(1,100)%2==0:
+                coords = (randint(0, self.gridSize-1), randint(0, 1)*(self.gridSize-1))
+            else:
+                coords = (randint(0, 1)*(self.gridSize-1), randint(0, self.gridSize-1))
+            # Check if position is empty
+            if snapshot[coords[0]][coords[1]] == 'H':
+                # Set location for player
+                player.setLocation(coords)
+                # Update grid
+                self.grid[coords[0]][coords[1]] = player
+                # Exit loop
+                break
