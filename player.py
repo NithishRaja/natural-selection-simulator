@@ -35,7 +35,7 @@ class Player:
     # Function to get target for player
     def getTarget(self, grid):
         # Check if hungry flag is set to True
-        if hungry:
+        if self.hungry:
             # Initialise search object for locating food
             search = Search(grid, self.location, 'F')
         else:

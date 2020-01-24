@@ -118,7 +118,7 @@ class Grid:
 
     # Function to place new player along edges
     def playerStart(self, player):
-        """Place a player along the edgesself.
+        """Place a player along the edges.
 
         Keyword arguments:
         player -- player object
