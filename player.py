@@ -3,6 +3,9 @@
 #
 #
 
+# Local dependencies
+from search import Search
+
 # Initialise class
 class Player:
     # Configure player
@@ -28,6 +31,18 @@ class Player:
         if type(location) == type(tuple([1, 2])):
             # Set current location
             self.location = location
+
+    # Function to get target for player
+    def getTarget(self, grid):
+        # Check if hungry flag is set to True
+        if hungry:
+            # Initialise search object for locating food
+            search = Search(grid, self.location, 'F')
+        else:
+            # Initialise search object for locating edge
+            search = Search(grid, self.location, 'H')
+        # Update target
+        self.setTarget(search.start())
 
     # Function to set target
     def setTarget(self, target):
