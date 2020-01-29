@@ -6,6 +6,9 @@
 # Dependencies
 from random import randint
 
+# Local dependencies
+from player import Player
+
 # Initialise class
 class Grid:
     # Get all grid configurations
@@ -141,3 +144,30 @@ class Grid:
                 self.grid[coords[0]][coords[1]] = player
                 # Exit loop
                 break
+
+    # Function to move player
+    def movePlayer(self, currentLocation, newLocation):
+        """Move player from one cell to another and update player location.
+
+        Keyword arguments:
+        currentLocation -- tuple with current location of player
+        newLocation -- tuple with location to move player to
+        """
+        print("new location: ", newLocation)
+        # Check if player exists in current location
+        if type(self.grid[currentLocation[0]][currentLocation[1]]) == type(Player()):
+            # Check if new location has no players
+            if type(self.grid[newLocation[0]][newLocation[1]]) == type(""):
+                # Check if new location has food
+                if self.grid[newLocation[0]][newLocation[1]] == 'F':
+                    # Update hunger status of player
+                    self.grid[currentLocation[0]][currentLocation[1]].setHungerStatus(False)
+                # Move player to new cell
+                self.grid[newLocation[0]][newLocation[1]] = self.grid[currentLocation[0]][currentLocation[1]]
+                # Update old cell
+                if currentLocation[0] in [0, self.gridSize-1] or currentLocation[1] in [0, self.gridSize-1]:
+                    self.grid[currentLocation[0]][currentLocation[1]] = 'H'
+                else:
+                    self.grid[currentLocation[0]][currentLocation[1]] = '0'
+                # Update player location
+                self.grid[newLocation[0]][newLocation[1]].setLocation(newLocation)
