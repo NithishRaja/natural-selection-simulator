@@ -3,6 +3,10 @@
 #
 #
 
+# Dependencies
+import random
+import string
+
 # Local dependencies
 from search import Search
 
@@ -11,6 +15,9 @@ class Player:
     # Configure player
     def __init__(self):
         """Configure player with initial values."""
+        # Set player id
+        self.id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+
         # Set player location
         self.location = None
 
@@ -19,6 +26,12 @@ class Player:
 
         # initialise target
         self.target = None
+
+    # Function to get player id
+    def getId(self):
+        """Return player id."""
+        # Return id
+        return self.id
 
     # Function to set current location
     def setLocation(self, location):
