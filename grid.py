@@ -164,12 +164,19 @@ class Grid:
                     if self.grid[newLocation[0]][newLocation[1]] == 'F':
                         # Update hunger status of player
                         self.grid[currentLocation[0]][currentLocation[1]].setHungerStatus(False)
+                    # Check if location is home
+                    if self.grid[newLocation[0]][newLocation[1]] == 'H':
+                        # Update safety status of player
+                        self.grid[currentLocation[0]][currentLocation[1]].setSafetyStatus(True)
+                    else:
+                        # Update safety status of player
+                        self.grid[currentLocation[0]][currentLocation[1]].setSafetyStatus(False)
                     # Move player to new cell
                     self.grid[newLocation[0]][newLocation[1]] = self.grid[currentLocation[0]][currentLocation[1]]
+                    # Update player location
+                    self.grid[newLocation[0]][newLocation[1]].setLocation(newLocation)
                     # Update old cell
                     if currentLocation[0] in [0, self.gridSize-1] or currentLocation[1] in [0, self.gridSize-1]:
                         self.grid[currentLocation[0]][currentLocation[1]] = 'H'
                     else:
                         self.grid[currentLocation[0]][currentLocation[1]] = '0'
-                    # Update player location
-                    self.grid[newLocation[0]][newLocation[1]].setLocation(newLocation)

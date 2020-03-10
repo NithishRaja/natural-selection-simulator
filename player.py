@@ -21,11 +21,14 @@ class Player:
         # Set player location
         self.location = None
 
-        # Set hungry status to true
+        # Set hungry status to True
         self.hungry = True
 
         # initialise target
         self.target = None
+
+        # Set safety status to True
+        self.safety = True
 
     # Function to get player id
     def getId(self):
@@ -52,7 +55,7 @@ class Player:
         return self.location
 
     # Function to get target for player
-    def getTarget(self, grid):
+    def nextTarget(self, grid):
         # Check if hungry flag is set to True
         if self.hungry:
             # Initialise search object for locating food
@@ -75,6 +78,12 @@ class Player:
             # Set current target
             self.target = target
 
+    # Function to return current target
+    def getTarget(self):
+        """Return target tuple."""
+        # Return target
+        return self.target
+
     # Function to set hunger status
     def setHungerStatus(self, status):
         """Updates hunger status to the boolean passed as parameter.
@@ -92,6 +101,24 @@ class Player:
         """Returns hunger status."""
         # Return hunger status
         return self.hungry
+
+    # Function to set safety status
+    def setSafetyStatus(self, status):
+        """Updates safety status to the boolean passed as parameter.
+
+        Keyword arguments:
+        status -- boolean indicating hunget status
+        """
+        # Check if status type is boolean
+        if type(status) == type(False):
+            # update hunger status
+            self.safety = status
+
+    # Function to get safety status
+    def getSafetyStatus(self):
+        """Returns safety status."""
+        # Return safety status
+        return self.safety
 
     # Function to move player
     def getNextStep(self):
