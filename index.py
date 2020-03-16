@@ -11,20 +11,21 @@ from grid import Grid
 from player import Player
 
 # Function to move players
-def move(player, grid):
-    # Initialise lock for grid
-    lock = threading.RLock()
+def move(player, grid, semaphore):
     # Initialise step counter
     counter = 0
     # Open file for writing
     file = open("./plMove/"+player.getId()+".txt", 'w')
 
     while True:
-        # Acquire lock
-        lock.acquire()
+        # Acquire semaphore
+        semaphore.acquire()
+        print("here: ", player.getId())
         # Check if player should move
         if not player.getHungerStatus():
             if player.getSafetyStatus():
+                # Release semaphore
+                semaphore.release()
                 break
         # Update player target
         player.nextTarget(grid.getGrid())
@@ -42,9 +43,12 @@ def move(player, grid):
         # Update number of moves
         counter = counter+1
         if counter > 11:
+            # Release semaphore
+            semaphore.release()
             break
-        # Release lock
-        lock.release()
+        else:
+            # Release semaphore
+            semaphore.release()
     file.close()
 
 
@@ -64,6 +68,9 @@ def init():
     # Initialise threads
     threads = []
 
+    # Initialise semaphore for grid
+    semaphore = threading.Semaphore(1)
+
     for i in range(noOfPlayers):
         players.append(Player())
 
@@ -74,7 +81,7 @@ def init():
         # Search for each player's next target
         player.nextTarget(grid.getGrid())
         # Initialise a thread for each player
-        threads.append(threading.Thread(target=move, args=[player, grid]))
+        threads.append(threading.Thread(target=move, args=[player, grid, semaphore]))
 
     # Print grid
     grid.displayGrid()
