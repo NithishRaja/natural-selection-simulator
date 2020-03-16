@@ -179,7 +179,6 @@ class Grid:
                 # Update player location
                 player.setLocation(newLocation)
                 # Check new location safety
-                print("inside move: ", newLocation, self.gridSize)
                 if newLocation[0] == 0 or newLocation[0] == self.gridSize-1:
                     # Update player safety status
                     player.setSafetyStatus(True)
