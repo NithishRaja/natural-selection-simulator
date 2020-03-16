@@ -5,6 +5,7 @@
 
 ## Running program
 
+* Create a **plMove** directory in root
 * Run `python index.py` in root
 
 ## Editing code
