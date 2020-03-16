@@ -1,5 +1,8 @@
 # Ignore test files
 test*.py
 
+# Ignore logs
+plMove
+
 # Ignore pycache
 __pycache__
