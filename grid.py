@@ -82,7 +82,7 @@ class Grid:
             x = randint(1, self.gridSize-2)
             y = randint(1, self.gridSize-2)
             # Check if cell is empty
-            if self.grid[x][y] == '0':
+            if type(self.grid[x][y]) == type('str') and self.grid[x][y] == '0':
                 # Place food in empty cell
                 self.grid[x][y] = 'F'
                 # Update food count
@@ -102,9 +102,10 @@ class Grid:
                 if type(self.grid[i][j]) == type("a"):
                     # Update snapshot with element in current cell
                     snapshot[i].append(self.grid[i][j])
-                else:
+                # Check if current cell contains players
+                elif type(self.grid[i][j]) == type([]):
                     # If element in current cell is not a string, it is a player object
-                    snapshot[i].append('P')
+                    snapshot[i].append('P'+str(len(self.grid[i][j])))
         # Return snapshot
         return snapshot
 
@@ -116,7 +117,7 @@ class Grid:
         # Iterate over snapshot and print each element
         for row in snapshot:
             for elem in row:
-                print(elem, end="")
+                print(elem, end="\t")
             print()
 
     # Function to place new player along edges
@@ -136,12 +137,17 @@ class Grid:
                 coords = (randint(0, self.gridSize-1), randint(0, 1)*(self.gridSize-1))
             else:
                 coords = (randint(0, 1)*(self.gridSize-1), randint(0, self.gridSize-1))
+            # Set location for player
+            player.setLocation(coords)
             # Check if position is empty
             if snapshot[coords[0]][coords[1]] == 'H':
-                # Set location for player
-                player.setLocation(coords)
                 # Update grid
-                self.grid[coords[0]][coords[1]] = player
+                self.grid[coords[0]][coords[1]] = [player]
+                # Exit loop
+                break
+            else:
+                # Update grid
+                self.grid[coords[0]][coords[1]].append(player)
                 # Exit loop
                 break
 
@@ -154,29 +160,59 @@ class Grid:
         currentLocation -- tuple with current location of player
         newLocation -- tuple with location to move player to
         """
-        # Check if player exists in current location
-        if type(self.grid[currentLocation[0]][currentLocation[1]]) == type(Player()):
-            # Check if given id matches that of player id
-            if id == self.grid[currentLocation[0]][currentLocation[1]].getId():
-                # Check if new location has no players
-                if type(self.grid[newLocation[0]][newLocation[1]]) == type(""):
+        # Check if any player exists in current location
+        if type(self.grid[currentLocation[0]][currentLocation[1]]) == type([]):
+            # Initialise variable to hold player index
+            playerIndex = -1
+            # Iterate over all players
+            for index, player in enumerate(self.grid[currentLocation[0]][currentLocation[1]]):
+                # Check if player id matches
+                if id == player.getId():
+                    # Set player index
+                    playerIndex = index
+                    # Exit loop
+                    break
+            # Check if valid player index is set
+            if playerIndex > -1:
+                # Remove player from current list
+                player = self.grid[currentLocation[0]][currentLocation[1]].pop(playerIndex)
+                # Update player location
+                player.setLocation(newLocation)
+                # Check new location safety
+                print("inside move: ", newLocation, self.gridSize)
+                if newLocation[0] == 0 or newLocation[0] == self.gridSize-1:
+                    # Update player safety status
+                    player.setSafetyStatus(True)
+                elif newLocation[1] == 0 or newLocation[1] == self.gridSize-1:
+                    # Update player safety status
+                    player.setSafetyStatus(True)
+                else:
+                    # Update player safety status
+                    player.setSafetyStatus(False)
+                # Check if new position has existing players
+                if type(self.grid[newLocation[0]][newLocation[1]]) == type([]):
+                    # Append player to list
+                    self.grid[newLocation[0]][newLocation[1]].append(player)
+                # New location does not have existing players
+                elif type(self.grid[newLocation[0]][newLocation[1]]) == type(''):
                     # Check if new location has food
                     if self.grid[newLocation[0]][newLocation[1]] == 'F':
-                        # Update hunger status of player
-                        self.grid[currentLocation[0]][currentLocation[1]].setHungerStatus(False)
-                    # Check if location is home
-                    if self.grid[newLocation[0]][newLocation[1]] == 'H':
-                        # Update safety status of player
-                        self.grid[currentLocation[0]][currentLocation[1]].setSafetyStatus(True)
-                    else:
-                        # Update safety status of player
-                        self.grid[currentLocation[0]][currentLocation[1]].setSafetyStatus(False)
-                    # Move player to new cell
-                    self.grid[newLocation[0]][newLocation[1]] = self.grid[currentLocation[0]][currentLocation[1]]
-                    # Update player location
-                    self.grid[newLocation[0]][newLocation[1]].setLocation(newLocation)
-                    # Update old cell
-                    if currentLocation[0] in [0, self.gridSize-1] or currentLocation[1] in [0, self.gridSize-1]:
+                        # Update player hungry status
+                        player.setHungerStatus(False)
+                    # Move player to new location
+                    self.grid[newLocation[0]][newLocation[1]] = [player]
+                # Check if other players exist in current location
+                if len(self.grid[currentLocation[0]][currentLocation[1]]) == 0:
+                    # Check current location safety
+                    if currentLocation[0] == 0 or currentLocation[0] == self.gridSize-1:
+                        # Update cell to home
+                        self.grid[currentLocation[0]][currentLocation[1]] = 'H'
+                    elif currentLocation[1] == 0 or currentLocation[1] == self.gridSize-1:
+                        # Update cell to home
                         self.grid[currentLocation[0]][currentLocation[1]] = 'H'
                     else:
+                        # Update cell to empty cell
                         self.grid[currentLocation[0]][currentLocation[1]] = '0'
+            #else:
+                # No player with given id found
+                # TODO: throw error
