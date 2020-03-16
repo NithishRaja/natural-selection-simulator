@@ -4,18 +4,20 @@
 #
 
 # Dependencies
-import threading, time
+import threading
+import time
+import os
 
 # Local dependencies
 from grid import Grid
 from player import Player
 
 # Function to move players
-def move(player, grid, semaphore):
+def move(day, player, grid, semaphore):
     # Initialise step counter
     counter = 0
     # Open file for writing
-    file = open("./plMove/"+player.getId()+".txt", 'a')
+    file = open("./logging/day"+str(day)+"/"+player.getId()+".txt", 'w')
 
     while True:
         # Acquire semaphore
@@ -28,17 +30,18 @@ def move(player, grid, semaphore):
                 break
         # Update player target
         player.nextTarget(grid.getGrid())
+        # Get player info
+        playerLocation = player.getLocation()
+        playerNextStep = player.getNextStep()
+        playerTarget = player.getTarget()
         # Move player towards target
-        grid.movePlayer(player.getId(), player.getLocation(), player.getNextStep())
-        file.write("---\n")
-        # Call function to get snapshot
-        snapshot = grid.getGrid()
-        # Iterate over snapshot and print each element
-        for row in snapshot:
-            for elem in row:
-                file.write(elem)
-                file.write("\t")
-            file.write("\n")
+        grid.movePlayer(player.getId(), playerLocation, playerNextStep)
+        # Build string to write to file
+        string = "("+str(playerLocation[0])+", "+str(playerLocation[1])+"),"
+        string = string + "("+str(playerTarget[0])+", "+str(playerTarget[1])+"),"
+        string = string + "("+str(playerNextStep[0])+", "+str(playerNextStep[1])+")\n"
+        # Write log to file
+        file.write(string)
         # Update number of moves
         counter = counter+1
         if counter > 11:
@@ -68,6 +71,12 @@ def init():
     grid = Grid(gridSize)
 
     for i in range(2):
+        # Initialise logging directory
+        logDir = os.path.join("logging", "day"+str(i))
+        # CHeck if directory for current day logging exists
+        if not os.path.exists(logDir):
+            # Create directory for logging
+            os.makedirs(logDir)
         # Call function to reset grid
         grid.fillZeros(False)
         # Call function to fill grid with food
@@ -91,12 +100,18 @@ def init():
             # Search for each player's next target
             player.nextTarget(grid.getGrid())
             # Initialise a thread for each player
-            threads.append(threading.Thread(target=move, args=[player, grid, semaphore]))
+            threads.append(threading.Thread(target=move, args=[i, player, grid, semaphore]))
 
-        print("---")
-
-        # Print grid
-        grid.displayGrid()
+        # Open file
+        file = open(os.path.join(logDir, "grid.txt"), "w")
+        # Call function to get snapshot
+        snapshot = grid.getGrid()
+        # Iterate over snapshot and print each element
+        for row in snapshot:
+            for elem in row:
+                file.write(elem)
+                file.write("\t")
+            file.write("\n")
 
         # Start all threads
         for thread in threads:
