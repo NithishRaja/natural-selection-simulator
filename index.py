@@ -20,7 +20,6 @@ def move(player, grid, semaphore):
     while True:
         # Acquire semaphore
         semaphore.acquire()
-        print("here: ", player.getId())
         # Check if player should move
         if not player.getHungerStatus():
             if player.getSafetyStatus():
