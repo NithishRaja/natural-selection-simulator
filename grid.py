@@ -34,9 +34,6 @@ class Grid:
         # Call function to fill grid with zeroes
         self.fillZeros(True)
 
-        # Call function to fill grid with food
-        self.initialiseFood()
-
     # Function to fill grid with zeroes
     def fillZeros(self, initial=False):
         """Iterate over grid and remove all food cells.
@@ -76,6 +73,8 @@ class Grid:
     # Function to randomly set food in cells
     def initialiseFood(self):
         """Select a cell randomly and if empty, place food in it."""
+        # Reset food counter
+        self.foodCounter = 0
         # Add food to grid till food limit is reached
         while self.foodCounter<self.foodLimit:
             # Get a random position

@@ -4,7 +4,7 @@
 #
 
 # Dependencies
-import threading
+import threading, time
 
 # Local dependencies
 from grid import Grid
@@ -15,7 +15,7 @@ def move(player, grid, semaphore):
     # Initialise step counter
     counter = 0
     # Open file for writing
-    file = open("./plMove/"+player.getId()+".txt", 'w')
+    file = open("./plMove/"+player.getId()+".txt", 'a')
 
     while True:
         # Acquire semaphore
@@ -61,32 +61,46 @@ def init():
     # Initialise players array
     players = []
 
-    # Initialise grid object
-    grid = Grid(gridSize)
-
-    # Initialise threads
-    threads = []
-
-    # Initialise semaphore for grid
-    semaphore = threading.Semaphore(1)
-
     for i in range(noOfPlayers):
         players.append(Player())
 
-    # Place player on grid
-    for player in players:
-        # Place players on grid
-        grid.playerStart(player)
-        # Search for each player's next target
-        player.nextTarget(grid.getGrid())
-        # Initialise a thread for each player
-        threads.append(threading.Thread(target=move, args=[player, grid, semaphore]))
+    # Initialise grid object
+    grid = Grid(gridSize)
 
-    # Print grid
-    grid.displayGrid()
+    for i in range(2):
+        # Call function to reset grid
+        grid.fillZeros(False)
+        # Call function to fill grid with food
+        grid.initialiseFood()
 
-    # Start all threads
-    for thread in threads:
-        thread.start()
+        # Initialise threads
+        threads = []
 
+        # Initialise semaphore for grid
+        semaphore = threading.Semaphore(1)
+
+        # Place player on grid
+        for player in players:
+            # Place players on grid in current iteration is the initial iteration
+            if i == 0:
+                # Place players on grid
+                grid.playerStart(player)
+            else:
+                # Update hunger status if current iretation is not initial interation
+                player.setHungerStatus(True)
+            # Search for each player's next target
+            player.nextTarget(grid.getGrid())
+            # Initialise a thread for each player
+            threads.append(threading.Thread(target=move, args=[player, grid, semaphore]))
+
+        print("---")
+
+        # Print grid
+        grid.displayGrid()
+
+        # Start all threads
+        for thread in threads:
+            thread.start()
+
+        time.sleep(5)
 init()
