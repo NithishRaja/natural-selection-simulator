@@ -18,4 +18,4 @@
 ## Logging
 
 * grid state for each day is logged inside **logging/day{day no}**
-* player movements for each day is logged inside **logging/day<day no>/{player id}**
+* player movements for each day is logged inside **logging/day{day no}/{player id}**
