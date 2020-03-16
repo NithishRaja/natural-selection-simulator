@@ -2,7 +2,7 @@
 test*.py
 
 # Ignore logs
-plMove
+plMove/*
 
 # Ignore pycache
 __pycache__
