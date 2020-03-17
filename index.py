@@ -7,6 +7,7 @@
 import threading
 import time
 import os
+import json
 
 # Local dependencies
 from grid import Grid
@@ -55,22 +56,20 @@ def move(day, player, grid, semaphore):
 
 
 def init():
-    # Set grid size
-    gridSize = 10
-
-    # Set no of players
-    noOfPlayers = 3
+    # Read grid config
+    file = open("./gridConfig.json")
+    gridConfig = json.load(file)
 
     # Initialise players array
     players = []
 
-    for i in range(noOfPlayers):
+    for i in range(gridConfig["noOfPlayers"]):
         players.append(Player())
 
     # Initialise grid object
-    grid = Grid(gridSize)
+    grid = Grid(gridConfig["gridSize"], gridConfig["foodLimit"])
 
-    for i in range(2):
+    for i in range(gridConfig["noOfDays"]):
         # Initialise logging directory
         logDir = os.path.join("logging", "day"+str(i))
         # CHeck if directory for current day logging exists
