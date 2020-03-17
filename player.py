@@ -30,6 +30,9 @@ class Player:
         # Set safety status to True
         self.safety = True
 
+        # Set terminate status to false
+        self.terminate = False
+
     # Function to get player id
     def getId(self):
         """Return player id."""
@@ -140,3 +143,13 @@ class Player:
             y_new = self.location[1]+1
 
         return (x_new, y_new)
+
+    # Function to set terminate flag to True
+    def initiateTermination(self):
+        """Change terminate flag value to True."""
+        self.terminate = True
+
+    # Function to get value of terminate flag
+    def getTerminateStatus(self):
+        """Return value of terminate flag."""
+        return self.terminate

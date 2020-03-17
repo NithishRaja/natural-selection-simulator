@@ -211,6 +211,16 @@ class Grid:
                     else:
                         # Update cell to empty cell
                         self.grid[currentLocation[0]][currentLocation[1]] = '0'
-            #else:
-                # No player with given id found
-                # TODO: throw error
+
+    # Function to initiate termination of all players in unsafe cells
+    def removeStragglers(self):
+        """Iterate over all unsafe cells and call initiateTermination on players in those cells."""
+        # Iterate over grid
+        for i in range(1, self.gridSize-1):
+            for j in range(1, self.gridSize-1):
+                # Check if cell has players
+                if type(self.grid[i][j]) == type([]):
+                    # Iterate over all players in current cell
+                    for player in self.grid[i][j]:
+                        # Call initiateTermination on player
+                        player.initiateTermination()

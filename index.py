@@ -21,14 +21,12 @@ def move(day, player, grid, semaphore):
     file = open("./logging/day"+str(day)+"/"+player.getId()+".txt", 'w')
 
     while True:
-        # Acquire semaphore
-        semaphore.acquire()
         # Check if player should move
         if not player.getHungerStatus():
             if player.getSafetyStatus():
-                # Release semaphore
-                semaphore.release()
                 break
+        # Acquire semaphore
+        semaphore.acquire()
         # Update player target
         player.nextTarget(grid.getGrid())
         # Get player info
@@ -49,9 +47,8 @@ def move(day, player, grid, semaphore):
             # Release semaphore
             semaphore.release()
             break
-        else:
-            # Release semaphore
-            semaphore.release()
+        # Release semaphore
+        semaphore.release()
     file.close()
 
 
@@ -76,8 +73,6 @@ def init():
         if not os.path.exists(logDir):
             # Create directory for logging
             os.makedirs(logDir)
-        # Call function to reset grid
-        grid.fillZeros(False)
         # Call function to fill grid with food
         grid.initialiseFood()
 
@@ -116,5 +111,17 @@ def init():
         for thread in threads:
             thread.start()
 
-        time.sleep(5)
+        # Wait for all thread executions to complete
+        while threading.active_count() > 1:
+            time.sleep(5)
+
+        # Call function to reset grid
+        grid.fillZeros(False)
+        # Call function to set terminate flag to True for players in unsafe cells
+        grid.removeStragglers()
+        # Iterate over players and remove players with terminate set to True
+        players = [player for player in players if not player.getTerminateStatus()]
+        # Iterate over players and remove players with hunger set to True
+        players = [player for player in players if not player.getHungerStatus()]
+
 init()
