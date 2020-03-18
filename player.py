@@ -79,13 +79,13 @@ class Player:
             target = self.getClosestEdge(gridSize)
         # Check if target is set to None
         if target == None:
-        # Iterate till a random target that is different from current location is obtained
-        while True:
-            # Get a random target
-            target = (random.randint(0, gridSize-1), random.randint(0, gridSize-1))
-            # Check if target and location are different
-            if not target == self.location:
-                break
+            # Iterate till a random target that is different from current location is obtained
+            while True:
+                # Get a random target
+                target = (random.randint(0, gridSize-1), random.randint(0, gridSize-1))
+                # Check if target and location are different
+                if not target == self.location:
+                    break
         # Update target
         self.setTarget(target)
 
