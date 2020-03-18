@@ -68,31 +68,46 @@ class Player:
             # Get target
             target = search.start()
         else:
-            # Calculate grid size
-            gridSize = len(grid)
-            # Get the closest edge
-            if self.location[0] > self.location[1]:
-                if self.location[1] > int(gridSize/2):
-                    target = (gridSize-1, self.location[1])
-                elif self.location[0] < int(gridSize/2):
-                    target = (self.location[0], 0)
-                else:
-                    if gridSize-1-self.location[0] > self.location[1]:
-                        target = (self.location[0], 0)
-                    else:
-                        target = (gridSize-1, self.location[1])
-            else:
-                if self.location[0] > int(gridSize/2):
-                    target = (self.location[0], gridSize-1)
-                elif self.location[1] < int(gridSize/2):
-                    target = (0, self.location[1])
-                else:
-                    if gridSize-1-self.location[1] > self.location[0]:
-                        target = (0, self.location[1])
-                    else:
-                        target = (self.location[0], gridSize-1)
+            # Call function to get the closest edge cell
+            target = self.getClosestEdge(len(grid))
         # Update target
         self.setTarget(target)
+
+    # Function to return the closest cdge cell
+    def getClosestEdge(self, gridSize):
+        # Initialise target variable
+        target = None
+        # Check magnitude of coordinates
+        if self.location[0] > self.location[1]:
+            # Check if both coordinates are greater than half grid size
+            if self.location[1] > int(gridSize/2):
+                target = (gridSize-1, self.location[1])
+            # Check if both coordinates are smaller than half grid size
+            elif self.location[0] < int(gridSize/2):
+                target = (self.location[0], 0)
+            # Handle case where one coordinate is greater than half grid size while other is smaller
+            else:
+                # Get the coordinate closer to edge
+                if gridSize-1-self.location[0] > self.location[1]:
+                    target = (self.location[0], 0)
+                else:
+                    target = (gridSize-1, self.location[1])
+        else:
+            # Check if both coordinates are greater than half grid size
+            if self.location[0] > int(gridSize/2):
+                target = (self.location[0], gridSize-1)
+            # Check if both coordinates are smaller than half grid size
+            elif self.location[1] < int(gridSize/2):
+                target = (0, self.location[1])
+            # Handle case where one coordinate is greater than half grid size while other is smaller
+            else:
+                # Get the coordinate closer to edge
+                if gridSize-1-self.location[1] > self.location[0]:
+                    target = (0, self.location[1])
+                else:
+                    target = (self.location[0], gridSize-1)
+        # Return target tuple
+        return target
 
     # Function to set target
     def setTarget(self, target):
