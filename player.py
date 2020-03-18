@@ -61,6 +61,8 @@ class Player:
     def nextTarget(self, grid):
         # Initialise variable to hold target
         target = None
+        # Calculate grid size
+        gridSize = len(grid)
         # Check if hungry flag is set to True
         if self.hungry:
             # Initialise search object for locating food
@@ -69,7 +71,16 @@ class Player:
             target = search.start()
         else:
             # Call function to get the closest edge cell
-            target = self.getClosestEdge(len(grid))
+            target = self.getClosestEdge(gridSize)
+        # Check if target is set to None
+        if target == None:
+        # Iterate till a random target that is different from current location is obtained
+        while True:
+            # Get a random target
+            target = (random.randint(0, gridSize-1), random.randint(0, gridSize-1))
+            # Check if target and location are different
+            if not target == self.location:
+                break
         # Update target
         self.setTarget(target)
 
