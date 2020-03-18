@@ -59,6 +59,11 @@ class Player:
 
     # Function to get target for player
     def nextTarget(self, grid):
+        """Calculate next target of player by checking hunger status and safety status.
+
+        Keyword arguments:
+        grid -- Square matrix showing current state of grid
+        """
         # Initialise variable to hold target
         target = None
         # Calculate grid size
@@ -86,6 +91,11 @@ class Player:
 
     # Function to return the closest cdge cell
     def getClosestEdge(self, gridSize):
+        """Calculate coordinates of closest cell in an edge.
+
+        Keyword arguments:
+        gridSize -- integer giving size of gird
+        """
         # Initialise target variable
         target = None
         # Check magnitude of coordinates
