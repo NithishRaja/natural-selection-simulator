@@ -59,15 +59,40 @@ class Player:
 
     # Function to get target for player
     def nextTarget(self, grid):
+        # Initialise variable to hold target
+        target = None
         # Check if hungry flag is set to True
         if self.hungry:
             # Initialise search object for locating food
             search = Search(grid, self.location, 'F')
+            # Get target
+            target = search.start()
         else:
-            # Initialise search object for locating edge
-            search = Search(grid, self.location, 'H')
+            # Calculate grid size
+            gridSize = len(grid)
+            # Get the closest edge
+            if self.location[0] > self.location[1]:
+                if self.location[1] > int(gridSize/2):
+                    target = (gridSize-1, self.location[1])
+                elif self.location[0] < int(gridSize/2):
+                    target = (self.location[0], 0)
+                else:
+                    if gridSize-1-self.location[0] > self.location[1]:
+                        target = (self.location[0], 0)
+                    else:
+                        target = (gridSize-1, self.location[1])
+            else:
+                if self.location[0] > int(gridSize/2):
+                    target = (self.location[0], gridSize-1)
+                elif self.location[1] < int(gridSize/2):
+                    target = (0, self.location[1])
+                else:
+                    if gridSize-1-self.location[1] > self.location[0]:
+                        target = (0, self.location[1])
+                    else:
+                        target = (self.location[0], gridSize-1)
         # Update target
-        self.setTarget(search.start())
+        self.setTarget(target)
 
     # Function to set target
     def setTarget(self, target):
