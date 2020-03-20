@@ -74,6 +74,7 @@ class Player:
             search = Search(grid, self.location, 'F')
             # Get target
             target = search.start()
+            print("inside hungry: ", "id: ", self.id, "target: ", self.target, "currTarget: ", target)
         else:
             # Call function to get the closest edge cell
             target = self.getClosestEdge(gridSize)
@@ -88,6 +89,7 @@ class Player:
                     break
         # Update target
         self.setTarget(target)
+        print("after setTarget: ", "id: ", self.id, "target: ", self.target)
 
     # Function to return the closest cdge cell
     def getClosestEdge(self, gridSize):
