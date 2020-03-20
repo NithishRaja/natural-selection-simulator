@@ -29,10 +29,40 @@ class Cell:
         else:
             return False
 
-    # Function to increment food value
-    def incrementFood(self):
-        """Increase food value by 1."""
-        self.food = self.food + 1
+    # Function to modify food value
+    def modifyFoodCount(self, modification):
+        """Increment, decrement or reset to zero food value according to parameter.
+
+        Keyword arguments:
+        modification -- one of three strings in 'increment', 'decrement' or 'reset'
+        """
+        # Check if modification is among allowed modifications
+        if modification in ["increment", "decrement", "reset"]:
+            # Check if modification is increment
+            if modification == "increment":
+                # Increase food value by 1
+                self.food = self.food + 1
+                # Return True
+                return True
+            # Check if modification is decrement
+            if modification == "decrement":
+                # Check if food value is positive
+                if self.food > 0:
+                    # Decrease food value
+                    self.food = self.food - 1
+                    # Return True
+                    return True
+                else:
+                    # Food value is zero or below zero
+                    return False
+            # Check if modification is reset
+            if modification == "reset":
+                # Set food value to zero
+                self.food = 0
+                # Return True
+                return True
+        # TODO: log error trying to update cell food count (attempted modification not allowed)
+        # else:
 
     # Function to check if cell is safe
     def isSafe(self):

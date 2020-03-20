@@ -62,4 +62,4 @@ class Grid:
             # Generate a random cell coordinate
             coordinate = (random.randint(1, self.gridSize-2), random.randint(1, self.gridSize-2))
             # Increment food in coordinate
-            self.grid[coordinate[0]][coordinate[1]].incrementFood()
+            self.grid[coordinate[0]][coordinate[1]].modifyFoodCount("increment")
