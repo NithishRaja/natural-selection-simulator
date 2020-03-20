@@ -19,3 +19,7 @@
 
 * grid state for each day is logged inside **logging/day{day no}**
 * player movements for each day is logged inside **logging/day{day no}/{player id}**
+
+## Features
+
+* Currently a new grid is being worked on where all cells are objects instead of some being strings and others being arrays
