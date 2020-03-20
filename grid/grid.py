@@ -4,6 +4,9 @@
 #
 
 # Dependencies
+import random
+
+# Local dependencies
 from grid.cell import Cell
 
 # Initialise class
@@ -46,3 +49,17 @@ class Grid:
                 if i == 0 or j == 0 or i == self.gridSize-1 or j == self.gridSize-1:
                     # Update cell safety to True
                     self.grid[i][j].updateSafety(True)
+
+    # Function to add food on grid
+    def initialiseFood(self, foodLimit=5):
+        """Randomly select cells and increment their food values.
+
+        Keyword arguments:
+        foodLimit -- Integer indicating number of food to add to grid
+        """
+        # Iterate till food limit is reached
+        for i in range(foodLimit):
+            # Generate a random cell coordinate
+            coordinate = (random.randint(1, self.gridSize-2), random.randint(1, self.gridSize-2))
+            # Increment food in coordinate
+            self.grid[coordinate[0]][coordinate[1]].incrementFood()

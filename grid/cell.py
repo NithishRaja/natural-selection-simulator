@@ -29,6 +29,11 @@ class Cell:
         else:
             return False
 
+    # Function to increment food value
+    def incrementFood(self):
+        """Increase food value by 1."""
+        self.food = self.food + 1
+
     # Function to check if cell is safe
     def isSafe(self):
         """Return value of safe variable."""
