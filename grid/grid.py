@@ -17,7 +17,15 @@ class Grid:
         # Initialise grid as empty array
         self.grid = []
 
-        # Fill grid with cells
+        # Call function to initialise cells
+        self.initialiseGrid()
+
+        # Call function to mark safe edges
+        self.markEdgesAsSafe()
+
+    # Function to fill grid with cells
+    def initialiseGrid(self):
+        """Iterate over grid and initialise each cell."""
         # Iterate over rows in grid
         for i in range(self.gridSize):
             # Append array for each row
