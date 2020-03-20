@@ -26,3 +26,15 @@ class Grid:
             for j in range(self.gridSize):
                 # Initialise cell
                 self.grid[i].append(Cell())
+
+    # Function to mark edges as safe cells
+    def markEdgesAsSafe(self):
+        """Iterate over all cells in grid and mark cells in edges as safe."""
+        # Iterate over all rows
+        for i in range(self.gridSize):
+            # Iterate over all columns
+            for j in range(self.gridSize):
+                # Check if cell is along an edge
+                if i == 0 or j == 0 or i == self.gridSize-1 or j == self.gridSize-1:
+                    # Update cell safety to True
+                    self.grid[i][j].updateSafety(True)
