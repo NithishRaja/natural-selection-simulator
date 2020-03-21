@@ -63,3 +63,50 @@ class Grid:
             coordinate = (random.randint(1, self.gridSize-2), random.randint(1, self.gridSize-2))
             # Increment food in coordinate
             self.grid[coordinate[0]][coordinate[1]].modifyFoodCount("increment")
+
+    # Function to get snapshot of image
+    def getSnapshot(self, target="all"):
+        """Return a matrix representing the current state of the grid.
+
+        Keyword arguments:
+        target -- string representing the target to focus on
+        """
+        # Check if target is valid
+        if target in ["all", "food", "home"]:
+            # Initialise empty array for snapshot
+            snapshot = []
+            # Iterate over rows
+            for i in range(self.gridSize):
+                # Add row to snapshot
+                snapshot.append([])
+                # Iterate over columns
+                for j in range(self.gridSize):
+                    # Add empty cell to snapshot
+                    snapshot[i].append("0")
+                    # Check if target is food
+                    if target == "food" and self.grid[i][j].foodExists():
+                        # Modify cell to show food
+                        snapshot[i][j] = "F"
+                    # Check if target is home
+                    if target == "home" and self.grid[i][j].isSafe():
+                        # modify cell to show safe cells
+                        snapshot[i][j] = "H"
+                    if target == "all":
+                        # modify cell to show status of cell
+                        status = ""
+                        # Check if cell is safe
+                        if self.grid[i][j].isSafe():
+                            status = status + "H"
+                        else:
+                            status = status + "0"
+                        # Check if cell has food
+                        if self.grid[i][j].foodExists():
+                            status = status + "F"
+                        # Update status with player count
+                        status = status + "P" + str(self.grid[i][j].getPopulation())
+                        # Add status to snapshot
+                        snapshot[i][j] = status
+            # Return snapshot
+            return snapshot
+        # TODO: return a error (invalid target)
+        # else:

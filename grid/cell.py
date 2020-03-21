@@ -23,7 +23,7 @@ class Cell:
     def foodExists(self):
         """Return True if food is positive else return False."""
         # Check if food is above 0
-        if food > 0:
+        if self.food > 0:
             # return True
             return True
         else:
