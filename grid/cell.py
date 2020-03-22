@@ -83,6 +83,42 @@ class Cell:
         # TODO: log an error when trying to update cell safety (passed parameter is not a boolean)
         # else:
 
+    # Function to add players to cell
+    def addPlayer(self, player):
+        """Append player to players array.
+
+        Keyword arguments:
+        player -- player object
+        """
+        self.players.append(player)
+
+    # Function to remove player from cell by player id
+    def removePlayer(self, playerId):
+        """Remove player with given id from array and return player else return False.
+
+        Keyword arguments:
+        playerId -- String
+        """
+        # Initialise index for player
+        playerIndex = None
+        # Iterate over all players
+        for index, player in enumerate(self.players):
+            # Check if player with requested id exists
+            if player.getId() == playerId:
+                # Set player index to current index
+                playerIndex = index
+                # Exit loop
+                break
+        # Check if player index is set
+        if type(playerIndex) == type(1):
+            # Remove player from array
+            player = self.players.pop(playerIndex)
+            # Return player
+            return player
+        else:
+            # Player does not exist, return False
+            return False
+
     # Function to get number of players
     def getPopulation(self):
         """Return the size of players array."""
