@@ -1,83 +1,126 @@
 #
-# File containing code to perform grid search
+# File containing code for searching grid
 #
 #
 
 # Dependencies
 
-
-# initialise class
+# Initialise class
 class Search:
-    # Initialise values
-    def __init__(self, grid, startingPoint, searchTarget):
-        """Store grid, starting point and search target
+    # Initialise constructor
+    def __init__(self, grid, location, target, radius):
+        """Initialise parameters and calculate grid size.
 
         Keyword arguments:
-        grid -- Square matrix to  perform search on
-        startingPoint -- Tuple with the starting point for search
-        searchTarget -- String or Integer with the search target
+        grid -- matrix representing state of grid
+        location -- tuple with starting locaation for search
+        target -- string representing target
+        radius -- integer representing radius to limit search to
         """
-        # Set grid
+        # Initialise grid
         self.grid = grid
 
-        # Set grid size
+        # Initialise location
+        self.location = location
+
+        # Initialise target
+        self.target = target
+
+        # Initialise radius
+        self.radius = radius
+
+        # Calculate grid size
         self.gridSize = len(self.grid)
 
-        # Set starting point
-        self.startingPoint = startingPoint
+        # Initialise lower limit
+        self.lowerLimit = [0, 0]
 
-        # Set search target
-        self.searchTarget = searchTarget
+        # Initialise upper limit
+        self.upperLimit = [self.gridSize-1, self.gridSize-1]
 
-    # Initialise function to perform search
-    def start(self):
-        """Perform grid search and return the result"""
-        # Initialise limits for searching
-        x_low = None
-        y_low = None
-        x_high = None
-        y_high = None
+        # Call function to calculate limits if radius is not None
+        if self.radius == None:
+            self.calculateLimits()
 
-        # Array to hold all cells already searched
-        old = []
+    # Function to calculate limits for search
+    def calculateLimits(self):
+        """Calculate maximum radius for search."""
+        # Calculate maximum distance between edge and x coordinate
+        x_max = max(self.location[0], self.gridSize-1-self.location[0])
+        # Calculate maximum distance between edge and y coordinate
+        y_max = max(self.location[1], self.gridSize-1-self.location[1])
+        # Set radius as max distance between current location and an edge
+        self.radius = max(x_max, y_max)
 
-        # Initialise search radius
-        searchRadius = 0
-
-        # Flag to indicate status of search
-        found = False
-
-        # Initialising food location
-        foodLocation = None
-
-        # Perform grid search to locate food
-        while not found:
-            # Update search radius
-            searchRadius = searchRadius + 1
-            # Check if all cells have been searched
-            if (self.gridSize-1, self.gridSize-1) in old:
-                if (0, 0) in old:
+    # Function to locate target
+    def locateTarget(self):
+        """Return target coordinates closest to location."""
+        # Initialise target location
+        targetLocation = None
+        # Iterate from 0 to radius
+        for i in range(self.radius+1):
+            # Calculate search limits
+            x_max = self.location[0] + i if self.location[0] + i < self.gridSize else self.gridSize - 1
+            x_min = self.location[0] - i if self.location[0] > i else 0
+            y_max = self.location[1] + i if self.location[1] + i < self.gridSize else self.gridSize - 1
+            y_min = self.location[1] - i if self.location[1] > i else 0
+            # Check top left edge for target
+            if self.grid[x_min][y_min] == self.target:
+                # Set target location
+                targetLocation = (x_min, y_min)
+                # Break from loop
+                break
+            # Check top right edge for target
+            if self.grid[x_min][y_max] == self.target:
+                # Set target location
+                targetLocation = (x_min, y_max)
+                # Break from loop
+                break
+            # Check bottom left edge for target
+            if self.grid[x_max][y_min] == self.target:
+                # Set target location
+                targetLocation = (x_max, y_min)
+                # Break from loop
+                break
+            # Check bottom right edge for target
+            if self.grid[x_max][y_max] == self.target:
+                # Set target location
+                targetLocation = (x_max, y_max)
+                # Break from loop
+                break
+            # Calculate limits
+            lowerLimitY = self.location[1]-(i-1) if self.location[1] > (i-1) else 0
+            upperLimitY = self.location[1]+(i-1) if self.location[1]+(i-1) < self.gridSize else self.gridSize - 1
+            # Check cells in top and bottom edge
+            for j in range(lowerLimitY, upperLimitY+1):
+                if self.grid[x_min][j] == self.target:
+                    # Set target location
+                    targetLocation = (x_min, j)
+                    # Break from loop
                     break
-            else:
-                # Get limiting cell coordinates for given search radius
-                x_low = self.startingPoint[0]-searchRadius if self.startingPoint[0]-searchRadius > 0 else 0
-                y_low = self.startingPoint[1]-searchRadius if self.startingPoint[1]-searchRadius > 0 else 0
-
-                x_high = self.startingPoint[0]+searchRadius if self.startingPoint[0]+searchRadius < self.gridSize-1 else self.gridSize-1
-                y_high = self.startingPoint[1]+searchRadius if self.startingPoint[1]+searchRadius < self.gridSize-1 else self.gridSize-1
-
-                # Search all cells in guven search radius
-                for j in range(x_low, x_high+1):
-                    for k in range(y_low, y_high+1):
-                        # If cell was searched before, ignore it
-                        if (j, k) in old:
-                            break
-                        elif self.grid[j][k] == self.searchTarget:
-                            found=True
-                            foodLocation = (j, k)
-                            break
-                    if found:
-                        break
-        # Return the food location
-        # print("player position: ", self.startingPoint, " closest food location: ", foodLocation)
-        return foodLocation
+                if self.grid[x_max][j] == self.target:
+                    # Set target location
+                    targetLocation = (x_max, j)
+                    # Break from loop
+                    break
+            # Calculate limits
+            lowerLimitX = self.location[0]-(i-1) if self.location[0] > (i-1) else 0
+            upperLimitX = self.location[0]+(i-1) if self.location[0]+(i-1) < self.gridSize else self.gridSize - 1
+            # Check cells in left edge
+            for j in range(lowerLimitX, upperLimitX+1):
+                if self.grid[j][y_min] == self.target:
+                    # Set target location
+                    targetLocation = (j, y_min)
+                    # Break from loop
+                    break
+                if self.grid[j][y_max] == self.target:
+                    # Set target location
+                    targetLocation = (j, y_max)
+                    # Break from loop
+                    break
+            # Check if target location is obtained
+            if not targetLocation == None:
+                # Break from loop
+                break
+        # Return target
+        return targetLocation
