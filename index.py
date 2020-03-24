@@ -8,8 +8,8 @@ import json
 import random
 
 # Local dependencies
-from testPlayer import Player
-from testSearch import Search
+from player import Player
+from search import Search
 
 # Local dependencies
 from grid.grid import Grid
