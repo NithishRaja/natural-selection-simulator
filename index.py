@@ -62,7 +62,7 @@ class Ecosystem:
         self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
 
     # Function to get player target
-    def getPlayerTarget(self, playerIndex, target):
+    def getTargetLocation(self, playerIndex, target):
         """Get snapshot of grid and call search function to locate target.
 
         Keyword arguments:
@@ -109,4 +109,4 @@ class Ecosystem:
 eco = Ecosystem()
 eco.displayGrid()
 for i in range(len(eco.players)):
-    eco.getPlayerTarget(i, "food")
+    eco.getTargetLocation(i, "food")
