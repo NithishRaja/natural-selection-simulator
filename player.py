@@ -47,3 +47,41 @@ class Player:
             self.location = location
         # TODO: throw error (passed parameter is not a tuple)
         # else:
+
+    # Function to get hunger status
+    def getHungerStatus(self):
+        """Return hunger status."""
+        return self.hunger
+
+    # Funtion to update hunger status
+    def updateHungerStatus(self, status):
+        """Update hunger status to the parameter passed.
+
+        Keyword arguments:
+        status -- boolean
+        """
+        # Check if passed parameter is a boolean
+        if type(status) == type(True):
+            # Update hunger status
+            self.hunger = status
+        # TODO: throw error (parameter must be a boolean)
+        # else:
+
+    # Function to get safety status
+    def getSafetyStatus(self):
+        """Return safety status."""
+        return self.safety
+
+    # Function to update safety status
+    def updateSafetyStatus(self, status):
+        """Update safety status to the parameter passed.
+
+        Keyword arguments:
+        status -- boolean
+        """
+        # Check if passed parameter is a boolean
+        if type(status) == type(True):
+            # Update safety status
+            self.safety = status
+        # TODO: throw error (parameter must be a boolean)
+        # else:
