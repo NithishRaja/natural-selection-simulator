@@ -109,6 +109,37 @@ class Ecosystem:
         # else:
         return targetLocation
 
+    # Function to calculate player's next step to reach target
+    def getNextStep(self, currentLocation, targetLocation):
+        """Calculate next step to reach target.
+
+        Keyword arguments:
+        currentLocation -- tuple
+        targetLocation -- tuple
+        """
+        # Initialise tuple for new location
+        newLocation = [coordinate for coordinate in currentLocation]
+        # check if parameters passed are tuples
+        if type(currentLocation) == type((1,2)) and type(targetLocation) == type((1,2)):
+            # Check if x coordinate needs to be incremented
+            if currentLocation[0] < targetLocation[0]:
+                newLocation[0] = currentLocation[0]+1
+            # Check if x coordinate needs to be decremented
+            elif currentLocation[0] > targetLocation[0]:
+                newLocation[0] = currentLocation[0]-1
+            # Check if y coordinate needs to be incremented
+            if currentLocation[1] < targetLocation[1]:
+                newLocation[1] = currentLocation[1]+1
+            # Check if x coordinate needs to be decremented
+            elif currentLocation[1] > targetLocation[1]:
+                newLocation[1] = currentLocation[1]-1
+        # TODO: throw error (parameters must of type tuple)
+        # else:
+        # Convert new location to tuple
+        newLocation = tuple(newLocation)
+        # Return new location
+        return newLocation
+
     # Function to print snapshot of grid
     def displayGrid(self, target="all"):
         """Get snapshot of grid and print it element wise.
@@ -143,3 +174,11 @@ for i in range(len(eco.players)):
     if not target == None:
         # Get player target location
         targetLocation = eco.getTargetLocation(i, target)
+        # TODO: if target location is None, get a random target location
+        # Get current location
+        currentLocation = eco.players[i].getLocation()
+        # Get new location
+        newLocation = eco.getNextStep(currentLocation, targetLocation)
+        # Check if new location matches current location
+        # if not newLocation == currentLocation:
+            # Move player
