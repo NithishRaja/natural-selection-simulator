@@ -12,55 +12,103 @@ from player import Player
 from search import Search
 from grid.grid import Grid
 
-# Read grid config from file
-file = open("./gridConfig.json")
-gridConfig = json.load(file)
+# Initialise class
+class Ecosystem:
+    # Initialise constructor
+    def __init__(self):
+        """Read config file and initialise default parameters."""
+        # Open grid config file
+        file = open("./gridConfig.json")
+        # Read grid config from file
+        gridConfig = json.load(file)
+        # Close file
+        file.close()
 
-# initialise grid with grid size
-grid = Grid(gridConfig["gridSize"])
+        # Initialise grid size
+        self.gridSize = gridConfig["gridSize"]
 
-# Initialise food on grid
-grid.initialiseFood(gridConfig["foodLimit"])
+        # initialise grid with grid size
+        self.grid = Grid(self.gridSize)
 
-# Initialise array to hold players
-players = []
+        # Initialise food on grid
+        self.grid.initialiseFood(gridConfig["foodLimit"])
 
-# Create player objects and append them to players array
-for i in range(gridConfig["noOfPlayers"]):
-    players.append(Player())
+        # Initialise array to hold players
+        self.players = []
 
-# Iterate over players and add them to grid
-for player in players:
-    # Initialise coordinate
-    coordinate = None
-    # Choose a random coordinate
-    toss = random.randint(1,2)
-    if toss == 1:
-        coordinate = (random.randint(0, gridConfig["gridSize"]-1), random.randint(0, 1)*(gridConfig["gridSize"]-1))
-    else:
-        coordinate = (random.randint(0, 1)*(gridConfig["gridSize"]-1), random.randint(0, gridConfig["gridSize"]-1))
-    # Update location for player
-    player.updateLocation(coordinate)
-    # Add player to coordinate
-    grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
+        # Iterate till player limit is reached
+        for i in range(gridConfig["noOfPlayers"]):
+            # Call function to create players
+            self.initialisePlayer()
 
-# Get snapshot of grid
-snapshot = grid.getSnapshot("food")
+    # Function to create players and place them on grid
+    def initialisePlayer(self):
+        """Create a new player object and place in along a grid edge."""
+        # Initialise player
+        player = Player()
+        # Choose random coordinates
+        coordinate = (random.randint(0, self.gridSize-1), random.randint(0, 1)*(self.gridSize-1))
+        # Toss to reverse coordinates
+        toss = random.randint(1,2)
+        # Check if coordinates should be reversed
+        if toss == 1:
+            # Reverse coordinates
+            coordinate = coordinate[::-1]
+        # Update location for player
+        player.updateLocation(coordinate)
+        # Add player to players array
+        self.players.append(player)
+        # Add player to coordinate
+        self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
 
-# Print snapshot of grid
-# Iterate over each row
-for i in range(gridConfig["gridSize"]):
-    # Iterate over each column
-    for j in range(gridConfig["gridSize"]):
-        # Print cell
-        print(snapshot[i][j], end="\t")
-    # Enter new line for each row
-    print()
+    # Function to get player target
+    def getPlayerTarget(self, playerIndex, target):
+        """Get snapshot of grid and call search function to locate target.
 
-for player in players:
-    print(player.getLocation())
-    search = Search(snapshot, player.getLocation(), "F", None)
-    print("---")
-    target = search.locateTarget()
-    print("---")
-    print(target)
+        Keyword arguments:
+        playerIndex -- Integer specifying index of player
+        target -- string in 'food' or 'home'
+        """
+        # Check if target is among valid targets
+        if target in ["food", "home"]:
+            # Get snapshot of grid
+            snapshot = self.grid.getSnapshot(target)
+            # Get player location
+            currentLocation = self.players[playerIndex].getLocation()
+            print(currentLocation)
+            print("---")
+            # Initialise search
+            search = Search(snapshot, currentLocation, "F", None)
+            # Get target location
+            target = search.locateTarget()
+            print("---")
+            print(target)
+        # TODO: throw error (invalid target)
+        # else:
+
+    # Function to print snapshot of grid
+    def displayGrid(self, target="all"):
+        """Get snapshot of grid and print it element wise.
+
+        Keyword arguments:
+        target -- string in 'all', 'food' or 'home'
+        """
+        # Check if target is among valid targets
+        if target in ["all", "food", "home"]:
+            # Get snapshot of grid
+            snapshot = self.grid.getSnapshot(target)
+            # Iterate over each row
+            for i in range(self.gridSize):
+                # Iterate over each column
+                for j in range(self.gridSize):
+                    # Print cell
+                    print(snapshot[i][j], end="\t")
+                # Enter new line for each row
+                print()
+        # TODO: throw error (invalid target)
+        # else:
+
+eco = Ecosystem()
+eco.displayGrid()
+for i in range(len(eco.players)):
+    eco.getPlayerTarget(i, "food")
