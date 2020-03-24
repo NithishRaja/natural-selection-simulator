@@ -10,8 +10,6 @@ import random
 # Local dependencies
 from player import Player
 from search import Search
-
-# Local dependencies
 from grid.grid import Grid
 
 # Read grid config from file
