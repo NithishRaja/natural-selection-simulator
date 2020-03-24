@@ -62,6 +62,28 @@ class Ecosystem:
         self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
 
     # Function to get player target
+    def getTarget(self, playerIndex):
+        """Get player target based on player status.
+
+        Keyword arguments:
+        playerIndex -- Integer specifying index of player
+        """
+        # Initialise target
+        target = None
+        # Get player
+        player = self.players[playerIndex]
+        # Check hunger status of player
+        if player.getHungerStatus():
+            # Set player target to food
+            target = "food"
+        # Check safety status of player
+        elif not player.getSafetyStatus():
+            # Set player target to home
+            target = "home"
+        # Return target
+        return target
+
+    # Function to get player target
     def getTargetLocation(self, playerIndex, target):
         """Get snapshot of grid and call search function to locate target.
 
@@ -69,6 +91,8 @@ class Ecosystem:
         playerIndex -- Integer specifying index of player
         target -- string in 'food' or 'home'
         """
+        # Initialise target
+        targetLocation = None
         # Check if target is among valid targets
         if target in ["food", "home"]:
             # Get player
@@ -80,9 +104,10 @@ class Ecosystem:
             # Initialise search
             search = Search(snapshot, currentLocation, "F", None)
             # Get target location
-            target = search.locateTarget()
+            targetLocation = search.locateTarget()
         # TODO: throw error (invalid target)
         # else:
+        return targetLocation
 
     # Function to print snapshot of grid
     def displayGrid(self, target="all"):
@@ -106,7 +131,15 @@ class Ecosystem:
         # TODO: throw error (invalid target)
         # else:
 
+# Initialise ecosystem object
 eco = Ecosystem()
+# display grid
 eco.displayGrid()
+# Iterate over all players
 for i in range(len(eco.players)):
-    eco.getTargetLocation(i, "food")
+    # Get player target
+    target = eco.getTarget(i)
+    # Check if player target is not None
+    if not target == None:
+        # Get player target location
+        targetLocation = eco.getTargetLocation(i, target)
