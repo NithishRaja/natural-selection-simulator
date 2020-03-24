@@ -7,9 +7,6 @@
 import random
 import string
 
-# Local dependencies
-from search import Search
-
 # Initialise class
 class Player:
     # Initialise constructor
