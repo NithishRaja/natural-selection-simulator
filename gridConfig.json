@@ -1,6 +1,6 @@
 {
   "gridSize" : 10,
   "foodLimit" : 5,
-  "noOfPlayers" : 7,
+  "noOfPlayers" : 1,
   "noOfDays" : 2
 }

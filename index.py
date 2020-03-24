@@ -1,127 +1,68 @@
 #
-# Index file
+# Test file
 #
 #
 
 # Dependencies
-import threading
-import time
-import os
 import json
+import random
 
 # Local dependencies
-from grid import Grid
-from player import Player
+from testPlayer import Player
+from testSearch import Search
 
-# Function to move players
-def move(day, player, grid, semaphore):
-    # Initialise step counter
-    counter = 0
-    # Open file for writing
-    file = open("./logging/day"+str(day)+"/"+player.getId()+".txt", 'w')
+# Local dependencies
+from grid.grid import Grid
 
-    while True:
-        # Check if player should move
-        if not player.getHungerStatus():
-            if player.getSafetyStatus():
-                break
-        # Acquire semaphore
-        semaphore.acquire()
-        # Update player target
-        player.nextTarget(grid.getGrid())
-        # Get player info
-        playerLocation = player.getLocation()
-        playerNextStep = player.getNextStep()
-        playerTarget = player.getTarget()
-        # Move player towards target
-        grid.movePlayer(player.getId(), playerLocation, playerNextStep)
-        # Build string to write to file
-        string = "("+str(playerLocation[0])+", "+str(playerLocation[1])+"),"
-        string = string + "("+str(playerTarget[0])+", "+str(playerTarget[1])+"),"
-        string = string + "("+str(playerNextStep[0])+", "+str(playerNextStep[1])+")\n"
-        # Write log to file
-        file.write(string)
-        # Update number of moves
-        counter = counter+1
-        if counter > 11:
-            # Release semaphore
-            semaphore.release()
-            break
-        # Release semaphore
-        semaphore.release()
-    file.close()
+# Read grid config from file
+file = open("./gridConfig.json")
+gridConfig = json.load(file)
 
+# initialise grid with grid size
+grid = Grid(gridConfig["gridSize"])
 
-def init():
-    # Read grid config
-    file = open("./gridConfig.json")
-    gridConfig = json.load(file)
+# Initialise food on grid
+grid.initialiseFood(gridConfig["foodLimit"])
 
-    # Initialise players array
-    players = []
+# Initialise array to hold players
+players = []
 
-    for i in range(gridConfig["noOfPlayers"]):
-        players.append(Player())
+# Create player objects and append them to players array
+for i in range(gridConfig["noOfPlayers"]):
+    players.append(Player())
 
-    # Initialise grid object
-    grid = Grid(gridConfig["gridSize"], gridConfig["foodLimit"])
+# Iterate over players and add them to grid
+for player in players:
+    # Initialise coordinate
+    coordinate = None
+    # Choose a random coordinate
+    toss = random.randint(1,2)
+    if toss == 1:
+        coordinate = (random.randint(0, gridConfig["gridSize"]-1), random.randint(0, 1)*(gridConfig["gridSize"]-1))
+    else:
+        coordinate = (random.randint(0, 1)*(gridConfig["gridSize"]-1), random.randint(0, gridConfig["gridSize"]-1))
+    # Update location for player
+    player.updateLocation(coordinate)
+    # Add player to coordinate
+    grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
 
-    for i in range(gridConfig["noOfDays"]):
-        # Initialise logging directory
-        logDir = os.path.join("logging", "day"+str(i))
-        # CHeck if directory for current day logging exists
-        if not os.path.exists(logDir):
-            # Create directory for logging
-            os.makedirs(logDir)
-        # Call function to fill grid with food
-        grid.initialiseFood()
+# Get snapshot of grid
+snapshot = grid.getSnapshot("food")
 
-        # Initialise threads
-        threads = []
+# Print snapshot of grid
+# Iterate over each row
+for i in range(gridConfig["gridSize"]):
+    # Iterate over each column
+    for j in range(gridConfig["gridSize"]):
+        # Print cell
+        print(snapshot[i][j], end="\t")
+    # Enter new line for each row
+    print()
 
-        # Initialise semaphore for grid
-        semaphore = threading.Semaphore(1)
-
-        # Place player on grid
-        for player in players:
-            # Place players on grid in current iteration is the initial iteration
-            if i == 0:
-                # Place players on grid
-                grid.playerStart(player)
-            else:
-                # Update hunger status if current iretation is not initial interation
-                player.setHungerStatus(True)
-            # Search for each player's next target
-            player.nextTarget(grid.getGrid())
-            # Initialise a thread for each player
-            threads.append(threading.Thread(target=move, args=[i, player, grid, semaphore]))
-
-        # Open file
-        file = open(os.path.join(logDir, "grid.txt"), "w")
-        # Call function to get snapshot
-        snapshot = grid.getGrid()
-        # Iterate over snapshot and print each element
-        for row in snapshot:
-            for elem in row:
-                file.write(elem)
-                file.write("\t")
-            file.write("\n")
-
-        # Start all threads
-        for thread in threads:
-            thread.start()
-
-        # Wait for all thread executions to complete
-        while threading.active_count() > 1:
-            time.sleep(5)
-
-        # Call function to reset grid
-        grid.fillZeros(False)
-        # Call function to set terminate flag to True for players in unsafe cells
-        grid.removeStragglers()
-        # Iterate over players and remove players with terminate set to True
-        players = [player for player in players if not player.getTerminateStatus()]
-        # Iterate over players and remove players with hunger set to True
-        players = [player for player in players if not player.getHungerStatus()]
-
-init()
+for player in players:
+    print(player.getLocation())
+    search = Search(snapshot, player.getLocation(), "F", None)
+    print("---")
+    target = search.locateTarget()
+    print("---")
+    print(target)
