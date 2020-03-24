@@ -71,18 +71,16 @@ class Ecosystem:
         """
         # Check if target is among valid targets
         if target in ["food", "home"]:
+            # Get player
+            player = self.players[playerIndex]
             # Get snapshot of grid
             snapshot = self.grid.getSnapshot(target)
             # Get player location
-            currentLocation = self.players[playerIndex].getLocation()
-            print(currentLocation)
-            print("---")
+            currentLocation = player.getLocation()
             # Initialise search
             search = Search(snapshot, currentLocation, "F", None)
             # Get target location
             target = search.locateTarget()
-            print("---")
-            print(target)
         # TODO: throw error (invalid target)
         # else:
 
