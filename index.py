@@ -156,35 +156,37 @@ class Ecosystem:
         # TODO: throw error (invalid target)
         # else:
 
+    # Function to move players
+    def movePlayer(self, player):
+        # Get player id
+        playerId = player.getId()
+        # Set movement limit
+        maxMoves = 10
+        # Iterate till movement limit is rached
+        for move in range(maxMoves):
+            # display grid
+            eco.displayGrid()
+            print("---")
+            # Get player target
+            target = eco.getTarget(player)
+            # Check if player target is not None
+            if not target == None:
+                # Get current location
+                currentLocation = player.getLocation()
+                # Get player target location
+                targetLocation = eco.getTargetLocation(currentLocation, target)
+                # TODO: if target location is None, get a random target location
+                # Get new location
+                newLocation = eco.getNextStep(currentLocation, targetLocation)
+                # Check if new location matches current location
+                if not newLocation == currentLocation:
+                    # Move player
+                    eco.grid.movePlayer(playerId, currentLocation, newLocation)
+                    # Check if player has reached target
+                    # TODO: If player has reached target, update player hunger and safety
+
 # Initialise ecosystem object
 eco = Ecosystem()
-# # display grid
-# eco.displayGrid()
 # Iterate over all players
 for player in eco.players:
-    playerId = player.getId()
-    moveCounter = 0
-    while True:
-        # display grid
-        eco.displayGrid()
-        print("---")
-        if moveCounter > 10:
-            break
-        # Get player target
-        target = eco.getTarget(player)
-        # Check if player target is not None
-        if not target == None:
-            # Get current location
-            currentLocation = player.getLocation()
-            # Get player target location
-            targetLocation = eco.getTargetLocation(currentLocation, target)
-            # TODO: if target location is None, get a random target location
-            # Get new location
-            newLocation = eco.getNextStep(currentLocation, targetLocation)
-            # Check if new location matches current location
-            if not newLocation == currentLocation:
-                # Move player
-                eco.grid.movePlayer(playerId, currentLocation, newLocation)
-                # Check if player has reached target
-                # TODO: If player has reached target, update player hunger and safety
-            moveCounter = moveCounter + 1
+    eco.movePlayer(player)
