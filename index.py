@@ -166,6 +166,14 @@ class Ecosystem:
         # TODO: throw error (invalid target)
         # else:
 
+    # Function to get random coordinates
+    def getRandomCoordinates(self):
+        """Generate random coordinates within grid."""
+        # Generate random coordinates
+        coordinates = (random.randint(0, self.gridSize-1), random.randint(0, self.gridSize-1))
+        # Return coordinates
+        return coordinates
+
     # Function to move players
     def movePlayer(self, player):
         # Get player id
@@ -184,7 +192,10 @@ class Ecosystem:
                 currentLocation = player.getLocation()
                 # Get player target location
                 targetLocation = self.getTargetLocation(currentLocation, target)
-                # TODO: if target location is None, get a random target location
+                # Check if target location is None
+                if targetLocation == None:
+                    # Call function to get randon coordinates
+                    targetLocation = self.getRandomCoordinates()
                 # Get new location
                 newLocation = self.getNextStep(currentLocation, targetLocation)
                 # Check if new location matches current location
