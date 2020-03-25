@@ -206,6 +206,10 @@ class Ecosystem:
                             self.grid.grid[newLocation[0]][newLocation[1]].modifyFoodCount("decrement")
                             # Update player's hunger status
                             player.updateHungerStatus(False)
+            # Check if hunger is False and safety is True
+            if not player.getHungerStatus() and player.getSafetyStatus():
+                # Break from loop
+                break
 
 # Initialise ecosystem object
 eco = Ecosystem()
