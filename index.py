@@ -174,6 +174,36 @@ class Ecosystem:
         # Return coordinates
         return coordinates
 
+    # Function to calculate player's next move
+    def calculateNextMove(self, currentLocation, hungerStatus, safetyStatus):
+        """Calculate player's target and its current location. Return step to move towards target.
+
+        Keyword arguments:
+        currentLocation -- tuple
+        hungerStatus -- boolean
+        safetyStatus -- boolean
+        """
+        # Initialise new location
+        newLocation = currentLocation
+        # Initialise target location
+        targetLocation = None
+        # Check parameter types
+        if type(currentLocation) == type((1,2)) and type(hungerStatus) == type(True) and type(safetyStatus) == type(True):
+            # Get player target
+            target = self.getTarget(hungerStatus, safetyStatus)
+            # Check if player target is not None
+            if not target == None:
+                # Get player target location
+                targetLocation = self.getTargetLocation(currentLocation, target)
+                # Check if target location is None
+                if targetLocation == None:
+                    # Call function to get randon coordinates
+                    targetLocation = self.getRandomCoordinates()
+                # Get new location
+                newLocation = self.getNextStep(currentLocation, targetLocation)
+        # Return new location
+        return targetLocation, newLocation
+
     # Function to move players
     def movePlayer(self, player):
         # Get player id
@@ -184,39 +214,29 @@ class Ecosystem:
         for move in range(maxMoves):
             # display grid
             self.displayGrid()
-            # Get player target
-            target = self.getTarget(player.getHungerStatus(), player.getSafetyStatus())
-            # Check if player target is not None
-            if not target == None:
-                # Get current location
-                currentLocation = player.getLocation()
-                # Get player target location
-                targetLocation = self.getTargetLocation(currentLocation, target)
-                # Check if target location is None
-                if targetLocation == None:
-                    # Call function to get randon coordinates
-                    targetLocation = self.getRandomCoordinates()
-                # Get new location
-                newLocation = self.getNextStep(currentLocation, targetLocation)
-                # Check if new location matches current location
-                if not newLocation == currentLocation:
-                    # Move player
-                    self.grid.movePlayer(playerId, currentLocation, newLocation)
-                    # Check if cell is safe
-                    if self.grid.grid[newLocation[0]][newLocation[1]].isSafe():
-                        # Update player safety status
-                        player.updateSafetyStatus(True)
-                    else:
-                        # Update player safety status
-                        player.updateSafetyStatus(False)
-                    # Check if player has reached target
-                    if newLocation == targetLocation:
-                        # Check if player is hungry and cell has food
-                        if player.getHungerStatus() and self.grid.grid[newLocation[0]][newLocation[1]].foodExists():
-                            # Remove food from cell
-                            self.grid.grid[newLocation[0]][newLocation[1]].modifyFoodCount("decrement")
-                            # Update player's hunger status
-                            player.updateHungerStatus(False)
+            # Get player current location
+            currentLocation = player.getLocation()
+            # Call function to get new location to move to
+            targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus())
+            # Check if new location matches current location
+            if not newLocation == currentLocation:
+                # Move player
+                self.grid.movePlayer(playerId, currentLocation, newLocation)
+                # Check if cell is safe
+                if self.grid.grid[newLocation[0]][newLocation[1]].isSafe():
+                    # Update player safety status
+                    player.updateSafetyStatus(True)
+                else:
+                    # Update player safety status
+                    player.updateSafetyStatus(False)
+                # Check if player has reached target
+                if newLocation == targetLocation:
+                    # Check if player is hungry and cell has food
+                    if player.getHungerStatus() and self.grid.grid[newLocation[0]][newLocation[1]].foodExists():
+                        # Remove food from cell
+                        self.grid.grid[newLocation[0]][newLocation[1]].modifyFoodCount("decrement")
+                        # Update player's hunger status
+                        player.updateHungerStatus(False)
             # Check if hunger is False and safety is True
             if not player.getHungerStatus() and player.getSafetyStatus():
                 # Break from loop
