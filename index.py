@@ -164,21 +164,33 @@ class Ecosystem:
 
 # Initialise ecosystem object
 eco = Ecosystem()
-# display grid
-eco.displayGrid()
+# # display grid
+# eco.displayGrid()
 # Iterate over all players
-for i in range(len(eco.players)):
-    # Get player target
-    target = eco.getTarget(i)
-    # Check if player target is not None
-    if not target == None:
-        # Get player target location
-        targetLocation = eco.getTargetLocation(i, target)
-        # TODO: if target location is None, get a random target location
-        # Get current location
-        currentLocation = eco.players[i].getLocation()
-        # Get new location
-        newLocation = eco.getNextStep(currentLocation, targetLocation)
-        # Check if new location matches current location
-        # if not newLocation == currentLocation:
-            # Move player
+for playerIndex in range(len(eco.players)):
+    playerId = eco.players[playerIndex].getId()
+    moveCounter = 0
+    while True:
+        # display grid
+        eco.displayGrid()
+        print("---")
+        if moveCounter > 10:
+            break
+        # Get player target
+        target = eco.getTarget(playerIndex)
+        # Check if player target is not None
+        if not target == None:
+            # Get player target location
+            targetLocation = eco.getTargetLocation(playerIndex, target)
+            # TODO: if target location is None, get a random target location
+            # Get current location
+            currentLocation = eco.players[playerIndex].getLocation()
+            # Get new location
+            newLocation = eco.getNextStep(currentLocation, targetLocation)
+            # Check if new location matches current location
+            if not newLocation == currentLocation:
+                # Move player
+                eco.grid.movePlayer(playerId, currentLocation, newLocation)
+                # Check if player has reached target
+                # TODO: If player has reached target, update player hunger and safety
+            moveCounter = moveCounter + 1

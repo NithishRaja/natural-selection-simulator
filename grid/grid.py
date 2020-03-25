@@ -110,3 +110,25 @@ class Grid:
             return snapshot
         # TODO: return a error (invalid target)
         # else:
+
+    # Function to move player from one cell to another
+    def movePlayer(self, playerId, currentLocation, newLocation):
+        """Remove player from players array in one cell and append it to another cell.
+
+        Keyword arguments:
+        playerId -- string
+        currentLocation -- tuple
+        newLocation -- tuple
+        """
+        # Check if current location and new location are tuples
+        if type(currentLocation) == type((1,2)) and type(newLocation) == type((1,2)):
+            # Call remove player function on current cell
+            response = self.grid[currentLocation[0]][currentLocation[1]].removePlayer(playerId)
+            # Check if response is a boolean
+            if not type(response) == type(True):
+                # Update player location
+                response.updateLocation(newLocation)
+                # Add player to new location
+                self.grid[newLocation[0]][newLocation[1]].addPlayer(response)
+        # TODO: throw error (parameter type mismatch)
+        # else:
