@@ -84,23 +84,19 @@ class Ecosystem:
         return target
 
     # Function to get player target
-    def getTargetLocation(self, playerIndex, target):
+    def getTargetLocation(self, currentLocation, target):
         """Get snapshot of grid and call search function to locate target.
 
         Keyword arguments:
-        playerIndex -- Integer specifying index of player
+        currentLocation -- tuple
         target -- string in 'food' or 'home'
         """
         # Initialise target
         targetLocation = None
         # Check if target is among valid targets
         if target in ["food", "home"]:
-            # Get player
-            player = self.players[playerIndex]
             # Get snapshot of grid
             snapshot = self.grid.getSnapshot(target)
-            # Get player location
-            currentLocation = player.getLocation()
             # Initialise search
             search = Search(snapshot, currentLocation, "F", None)
             # Get target location
@@ -180,11 +176,11 @@ for playerIndex in range(len(eco.players)):
         target = eco.getTarget(playerIndex)
         # Check if player target is not None
         if not target == None:
-            # Get player target location
-            targetLocation = eco.getTargetLocation(playerIndex, target)
-            # TODO: if target location is None, get a random target location
             # Get current location
             currentLocation = eco.players[playerIndex].getLocation()
+            # Get player target location
+            targetLocation = eco.getTargetLocation(currentLocation, target)
+            # TODO: if target location is None, get a random target location
             # Get new location
             newLocation = eco.getNextStep(currentLocation, targetLocation)
             # Check if new location matches current location
