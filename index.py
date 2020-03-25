@@ -62,22 +62,25 @@ class Ecosystem:
         self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
 
     # Function to get player target
-    def getTarget(self, player):
+    def getTarget(self, hungerStatus, safetyStatus):
         """Get player target based on player status.
 
         Keyword arguments:
-        playerIndex -- player object
+        hungerStatus -- boolean
+        safetyStatus -- boolean
         """
         # Initialise target
         target = None
-        # Check hunger status of player
-        if player.getHungerStatus():
-            # Set player target to food
-            target = "food"
-        # Check safety status of player
-        elif not player.getSafetyStatus():
-            # Set player target to home
-            target = "home"
+        # Check if hungerStatus and safetyStatus are boolean
+        if type(hungerStatus) == type(True) and type(safetyStatus) == type(True):
+            # Check hunger status of player
+            if hungerStatus:
+                # Set player target to food
+                target = "food"
+            # Check safety status of player
+            elif not safetyStatus:
+                # Set player target to home
+                target = "home"
         # Return target
         return target
 
@@ -173,7 +176,7 @@ class Ecosystem:
             self.displayGrid()
             print("---")
             # Get player target
-            target = self.getTarget(player)
+            target = self.getTarget(player.getHungerStatus(), player.getSafetyStatus())
             # Check if player target is not None
             if not target == None:
                 # Get current location
