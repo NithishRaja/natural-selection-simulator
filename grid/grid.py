@@ -64,6 +64,16 @@ class Grid:
             # Increment food in coordinate
             self.grid[coordinate[0]][coordinate[1]].modifyFoodCount("increment")
 
+    # Function to reset food on grid
+    def resetFood(self):
+        """Iterate over all cells and call function to reset food count to 0."""
+        # Iterate over all rows
+        for i in range(self.gridSize):
+            # Iterate over all columns
+            for j in range(self.gridSize):
+                # Call function to reset food count
+                self.grid[i][j].modifyFoodCount("reset")
+
     # Function to get snapshot of image
     def getSnapshot(self, target="all"):
         """Return a matrix representing the current state of the grid.

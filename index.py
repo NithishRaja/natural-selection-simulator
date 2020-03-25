@@ -274,9 +274,12 @@ class Ecosystem:
         # Sleep tillall threads complete execution
         while threading.active_count() > 1:
             time.sleep(1)
-        # TODO: reset grid (remove all food)
-        # TODO: Remove hungry players
-        # TODO: Remove players in unsafe cells
+        # Call function to reset food on grid
+        self.grid.resetFood()
+        # Remove hungry players
+        self.players = [player for player in self.players if not player.getHungerStatus()]
+        # Remove players in unsafe cells
+        self.players = [player for player in self.players if player.getSafetyStatus()]
 
 # Initialise ecosystem object
 eco = Ecosystem()
