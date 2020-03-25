@@ -62,16 +62,14 @@ class Ecosystem:
         self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
 
     # Function to get player target
-    def getTarget(self, playerIndex):
+    def getTarget(self, player):
         """Get player target based on player status.
 
         Keyword arguments:
-        playerIndex -- Integer specifying index of player
+        playerIndex -- player object
         """
         # Initialise target
         target = None
-        # Get player
-        player = self.players[playerIndex]
         # Check hunger status of player
         if player.getHungerStatus():
             # Set player target to food
@@ -163,8 +161,8 @@ eco = Ecosystem()
 # # display grid
 # eco.displayGrid()
 # Iterate over all players
-for playerIndex in range(len(eco.players)):
-    playerId = eco.players[playerIndex].getId()
+for player in eco.players:
+    playerId = player.getId()
     moveCounter = 0
     while True:
         # display grid
@@ -173,11 +171,11 @@ for playerIndex in range(len(eco.players)):
         if moveCounter > 10:
             break
         # Get player target
-        target = eco.getTarget(playerIndex)
+        target = eco.getTarget(player)
         # Check if player target is not None
         if not target == None:
             # Get current location
-            currentLocation = eco.players[playerIndex].getLocation()
+            currentLocation = player.getLocation()
             # Get player target location
             targetLocation = eco.getTargetLocation(currentLocation, target)
             # TODO: if target location is None, get a random target location
