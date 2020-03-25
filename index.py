@@ -6,6 +6,8 @@
 # Dependencies
 import json
 import random
+import threading
+import time
 
 # Local dependencies
 from player import Player
@@ -27,14 +29,17 @@ class Ecosystem:
         # Initialise grid size
         self.gridSize = gridConfig["gridSize"]
 
-        # initialise grid with grid size
+        # Initialise grid with grid size
         self.grid = Grid(self.gridSize)
 
-        # Initialise food on grid
-        self.grid.initialiseFood(gridConfig["foodLimit"])
+        # Initialise food limit
+        self.foodLimit = gridConfig["foodLimit"]
 
         # Initialise array to hold players
         self.players = []
+
+        # Initialise array to hold threads
+        self.threads = []
 
         # Iterate till player limit is reached
         for i in range(gridConfig["noOfPlayers"]):
@@ -247,8 +252,33 @@ class Ecosystem:
                 # Break from loop
                 break
 
+    # Function to assign thread to each player
+    def assignThreads(self):
+        """Iterate over players and assign a thread to each."""
+        # Iterate over each player
+        for player in self.players:
+            # Create a thread and append to array
+            self.threads.append(threading.Thread(target=self.movePlayer, args=[player]))
+
+    # Function to begin day
+    def beginDay(self):
+        """Call all functions in order."""
+        # Initialise food on grid
+        self.grid.initialiseFood(self.foodLimit)
+        # Call function to assign threads to players
+        self.assignThreads()
+        # Iterate over all threads
+        for thread in self.threads:
+            # Start thread
+            thread.start()
+        # Sleep tillall threads complete execution
+        while threading.active_count() > 1:
+            time.sleep(1)
+        # TODO: reset grid (remove all food)
+        # TODO: Remove hungry players
+        # TODO: Remove players in unsafe cells
+
 # Initialise ecosystem object
 eco = Ecosystem()
-# Iterate over all players
-for player in eco.players:
-    eco.movePlayer(player)
+# Call function to begin day
+eco.beginDay()
