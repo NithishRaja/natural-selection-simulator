@@ -95,8 +95,13 @@ class Ecosystem:
         if target in ["food", "home"]:
             # Get snapshot of grid
             snapshot = self.grid.getSnapshot(target)
-            # Initialise search
-            search = Search(snapshot, currentLocation, "F", None)
+            # Check if target is food
+            if target == "food":
+                # Initialise search
+                search = Search(snapshot, currentLocation, "F", None)
+            elif target == "home":
+                # Initialise search
+                search = Search(snapshot, currentLocation, "H", None)
             # Get target location
             targetLocation = search.locateTarget()
         # TODO: throw error (invalid target)
@@ -162,28 +167,41 @@ class Ecosystem:
         playerId = player.getId()
         # Set movement limit
         maxMoves = 10
-        # Iterate till movement limit is rached
+        # Iterate till movement limit is reached
         for move in range(maxMoves):
             # display grid
-            eco.displayGrid()
+            self.displayGrid()
             print("---")
             # Get player target
-            target = eco.getTarget(player)
+            target = self.getTarget(player)
             # Check if player target is not None
             if not target == None:
                 # Get current location
                 currentLocation = player.getLocation()
                 # Get player target location
-                targetLocation = eco.getTargetLocation(currentLocation, target)
+                targetLocation = self.getTargetLocation(currentLocation, target)
                 # TODO: if target location is None, get a random target location
                 # Get new location
-                newLocation = eco.getNextStep(currentLocation, targetLocation)
+                newLocation = self.getNextStep(currentLocation, targetLocation)
                 # Check if new location matches current location
                 if not newLocation == currentLocation:
                     # Move player
-                    eco.grid.movePlayer(playerId, currentLocation, newLocation)
+                    self.grid.movePlayer(playerId, currentLocation, newLocation)
+                    # Check if cell is safe
+                    if self.grid.grid[newLocation[0]][newLocation[1]].isSafe():
+                        # Update player safety status
+                        player.updateSafetyStatus(True)
+                    else:
+                        # Update player safety status
+                        player.updateSafetyStatus(False)
                     # Check if player has reached target
-                    # TODO: If player has reached target, update player hunger and safety
+                    if newLocation == targetLocation:
+                        # Check if player is hungry and cell has food
+                        if player.getHungerStatus() and self.grid.grid[newLocation[0]][newLocation[1]].foodExists():
+                            # Remove food from cell
+                            self.grid.grid[newLocation[0]][newLocation[1]].modifyFoodCount("decrement")
+                            # Update player's hunger status
+                            player.updateHungerStatus(False)
 
 # Initialise ecosystem object
 eco = Ecosystem()
