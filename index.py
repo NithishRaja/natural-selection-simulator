@@ -153,6 +153,8 @@ class Ecosystem:
         if target in ["all", "food", "home"]:
             # Get snapshot of grid
             snapshot = self.grid.getSnapshot(target)
+            # Print a divider
+            print("---###---")
             # Iterate over each row
             for i in range(self.gridSize):
                 # Iterate over each column
@@ -174,7 +176,6 @@ class Ecosystem:
         for move in range(maxMoves):
             # display grid
             self.displayGrid()
-            print("---")
             # Get player target
             target = self.getTarget(player.getHungerStatus(), player.getSafetyStatus())
             # Check if player target is not None
