@@ -206,6 +206,11 @@ class Ecosystem:
 
     # Function to move players
     def movePlayer(self, player):
+        """Move player towards target.
+
+        Keyword arguments:
+        player -- player object
+        """
         # Get player id
         playerId = player.getId()
         # Set movement limit
