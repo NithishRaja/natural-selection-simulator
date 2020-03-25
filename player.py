@@ -27,7 +27,7 @@ class Player:
     # Function to get player id
     def getId(self):
         """Return player id."""
-        return self.playerId
+        return self.id
 
     # Function to get player location
     def getLocation(self):
