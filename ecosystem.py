@@ -181,6 +181,24 @@ class Ecosystem:
         # TODO: throw error (invalid target)
         # else:
 
+    # Function to write snapshot of grid to log file
+    def logGrid(self):
+        """Get snapshot of grid and write it to log file."""
+        # Get snapshot of grid
+        snapshot = self.grid.getSnapshot("all")
+        # open file
+        file = open(os.path.join(self.currentLogDir, "grid"), "a")
+        # Iterate over each row
+        for i in range(self.gridSize):
+            # Iterate over each column
+            for j in range(self.gridSize):
+                # Print cell
+                file.write(str(snapshot[i][j])+",")
+            # Enter new line for each row
+            file.write("\n")
+        # Close file
+        file.close()
+
     # Function to get random coordinates
     def getRandomCoordinates(self):
         """Generate random coordinates within grid."""
@@ -287,6 +305,8 @@ class Ecosystem:
         """Call functions to initialise food, assign threads and start threads."""
         # Initialise food on grid
         self.grid.initialiseFood(self.foodLimit)
+        # Log grid state to file
+        self.logGrid()
         # Call function to assign threads to players
         self.assignThreads()
         # Iterate over all threads
