@@ -1,5 +1,5 @@
 #
-# File containing test player logic
+# File containing player logic
 #
 #
 
