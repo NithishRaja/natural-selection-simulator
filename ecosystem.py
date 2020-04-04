@@ -343,6 +343,8 @@ class Ecosystem:
             self.currentLogDir = os.path.join(self.baseLogDir, "day"+str(i))
             # Create a directory for logging
             os.makedirs(self.currentLogDir)
+            # Update log directory path in grid
+            self.grid.updateLogDirectoryLocation(self.currentLogDir)
             print("Day "+str(i))
             # Call function to begin day
             self.beginDay()

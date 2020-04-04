@@ -5,6 +5,7 @@
 
 # Dependencies
 import random
+import os
 
 # Local dependencies
 from grid.cell import Cell
@@ -19,6 +20,9 @@ class Grid:
 
         # Initialise grid as empty array
         self.grid = []
+
+        # Initialise variable for log directory location
+        self.logDir  = None
 
         # Call function to initialise cells
         self.initialiseGrid()
@@ -140,5 +144,27 @@ class Grid:
                 response.updateLocation(newLocation)
                 # Add player to new location
                 self.grid[newLocation[0]][newLocation[1]].addPlayer(response)
+                # Open file to log player movements
+                file = open(os.path.join(self.logDir, "gridMovements"), "a")
+                # Build string to write to log file
+                logString = "playerId: "+str(playerId)
+                logString = logString +", currentLocation: ("+str(currentLocation[0])+", "+str(currentLocation[1])+"), "
+                logString = logString +", newLocation: ("+str(newLocation[0])+", "+str(newLocation[1])+")\n"
+                # Write player movement to file
+                file.write(logString)
         # TODO: throw error (parameter type mismatch)
         # else:
+
+    # Function to update log directory location
+    def updateLogDirectoryLocation(self, location):
+        """Check if passed parameter is a string and set it as log directory location.
+
+        Keyword arguments:
+        location -- string
+        """
+        # Check if parameter is a string
+        if type(location) == type("str"):
+            # Update log directory location
+            self.logDir = location
+        # TODO: throw type mismatch error
+        #else:
