@@ -8,6 +8,7 @@ import json
 import random
 import threading
 import time
+import os
 
 # Local dependencies
 from player import Player
@@ -25,6 +26,12 @@ class Ecosystem:
         gridConfig = json.load(file)
         # Close file
         file.close()
+
+        # Initialise base path to logging directory
+        self.baseLogDir = gridConfig["baseLogDir"]
+
+        # Initialise path to log current events
+        self.currentLogDir = None
 
         # Initilaise number of days
         self.noOfDays = gridConfig["noOfDays"]
@@ -231,6 +238,18 @@ class Ecosystem:
             currentLocation = player.getLocation()
             # Call function to get new location to move to
             targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus())
+            # Open file to log player movements
+            file = open(os.path.join(self.currentLogDir, playerId), "a")
+            # Prepare string to write to log file
+            logString = "hunger: "+str(player.getHungerStatus())
+            logString = logString +", safety: "+str(player.getHungerStatus())
+            logString = logString +", currentLocation: ("+str(currentLocation[0])+", "+str(currentLocation[1])+"), "
+            logString = logString +", targetLocation: ("+str(targetLocation[0])+", "+str(targetLocation[1])+"), "
+            logString = logString +", newLocation: ("+str(newLocation[0])+", "+str(newLocation[1])+")\n"
+            # Write player state to file
+            file.write(logString)
+            # Close file
+            file.close()
             # Check if new location matches current location
             if not newLocation == currentLocation:
                 # Move player
@@ -299,6 +318,10 @@ class Ecosystem:
     def startSimulation(self):
         # Iterate over number of days
         for i in range(self.noOfDays):
+            # Set current log dir
+            self.currentLogDir = os.path.join(self.baseLogDir, "day"+str(i))
+            # Create a directory for logging
+            os.makedirs(self.currentLogDir)
             print("Day "+str(i))
             # Call function to begin day
             self.beginDay()
