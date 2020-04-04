@@ -336,6 +336,7 @@ class Ecosystem:
 
     # Function to start simulation
     def startSimulation(self):
+        """Initialise log directory and call functions to start and complete cycle."""
         # Iterate over number of days
         for i in range(self.noOfDays):
             # Set current log dir
