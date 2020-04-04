@@ -26,6 +26,9 @@ class Ecosystem:
         # Close file
         file.close()
 
+        # Initilaise number of days
+        self.noOfDays = gridConfig["noOfDays"]
+
         # Initialise grid size
         self.gridSize = gridConfig["gridSize"]
 
@@ -260,9 +263,9 @@ class Ecosystem:
             # Create a thread and append to array
             self.threads.append(threading.Thread(target=self.movePlayer, args=[player]))
 
-    # Function to begin day
+    # Function to perfrom day activities
     def beginDay(self):
-        """Call all functions in order."""
+        """Call functions to initialise food, assign threads and start threads."""
         # Initialise food on grid
         self.grid.initialiseFood(self.foodLimit)
         # Call function to assign threads to players
@@ -274,14 +277,35 @@ class Ecosystem:
         # Sleep tillall threads complete execution
         while threading.active_count() > 1:
             time.sleep(1)
+
+    # Function to perform night activities
+    def beginNight(self):
+        """Call function to reset food on grid and remove players who do not meet end conditions."""
         # Call function to reset food on grid
         self.grid.resetFood()
         # Remove hungry players
         self.players = [player for player in self.players if not player.getHungerStatus()]
         # Remove players in unsafe cells
         self.players = [player for player in self.players if player.getSafetyStatus()]
+        # Reset threads
+        self.threads = []
+        # Iterate over all players
+        for player in self.players:
+            # Set player hunger status to True
+            player.updateHungerStatus(True)
+
+
+    # Function to start simulation
+    def startSimulation(self):
+        # Iterate over number of days
+        for i in range(self.noOfDays):
+            print("Day "+str(i))
+            # Call function to begin day
+            self.beginDay()
+            # Call function to begin night
+            self.beginNight()
 
 # Initialise ecosystem object
 eco = Ecosystem()
-# Call function to begin day
-eco.beginDay()
+# Call function to start simulation
+eco.startSimulation()
