@@ -6,26 +6,34 @@
 # Dependencies
 import random
 import string
+import json
 
 # Initialise class
 class Player:
     # Initialise constructor
     def __init__(self):
-        """Set default value to config parametes."""
+        """Read and set default value to config parametes."""
+        # Read config file
+        file = open("defaultPlayerConfig.json")
+        # Parse JSON data
+        config = json.load(file)
+        # Close file
+        file.close()
+
         # Initialise player id
-        self.id = ''.join(random.choice(string.ascii_letters) for i in range(10))
+        self.id = ''.join(random.choice(string.ascii_letters) for i in range(config["idSize"]))
 
         # Initialise player location
-        self.location = None
+        self.location = config["location"]
 
         # Initialise hunger status
-        self.hunger = True
+        self.hunger = config["hunger"]
 
         # Initialise safety status
-        self.safety = True
+        self.safety = config["safety"]
 
         # Set movement limit
-        self.movementLimit = 10
+        self.movementLimit = config["movementLimit"]
 
     # Function to get player id
     def getId(self):

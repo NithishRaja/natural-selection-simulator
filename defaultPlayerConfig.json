@@ -1,0 +1,7 @@
+{
+  "idSize" : 10,
+  "location" : null,
+  "hunger" : true,
+  "safety" : true,
+  "movementLimit" : 10
+}
