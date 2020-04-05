@@ -24,6 +24,9 @@ class Player:
         # Initialise safety status
         self.safety = True
 
+        # Set movement limit
+        self.movementLimit = 10
+
     # Function to get player id
     def getId(self):
         """Return player id."""
@@ -85,3 +88,8 @@ class Player:
             self.safety = status
         # TODO: throw error (parameter must be a boolean)
         # else:
+
+    # Function to get player movement limit
+    def getMovementLimit(self):
+        """Return movement limit value."""
+        return self.movementLimit

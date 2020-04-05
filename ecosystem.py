@@ -247,7 +247,7 @@ class Ecosystem:
         # Get player id
         playerId = player.getId()
         # Set movement limit
-        maxMoves = 10
+        maxMoves = player.getMovementLimit()
         # Iterate till movement limit is reached
         for move in range(maxMoves):
             # display grid
