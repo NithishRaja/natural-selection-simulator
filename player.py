@@ -35,6 +35,50 @@ class Player:
         # Set movement limit
         self.movementLimit = config["movementLimit"]
 
+    # Function to get player configuration
+    def getConfig(self):
+        """Return a dictionary with all player configuration."""
+        # Initialise a dictionary
+        config = {}
+        # Add location
+        config["location"] = self.location
+        # Add hunger status
+        config["hunger"] = self.hunger
+        # Add safety status
+        config["safety"] = self.safety
+        # Add movement limit
+        config["movementLimit"] = self.movementLimit
+        # Return config
+        return config
+
+    # Function to update current configuration
+    def updateConfig(self, config):
+        """Update all configuration using parameter passed.
+
+        Keyword argument:
+        config -- dict
+        """
+        # Check if parameter passed is a dict
+        if type(config) == type({}):
+            # Check if location config is passed
+            if "location" in config.keys():
+                # Update location
+                self.location = config["location"]
+            # Check if location config is passed
+            if "hunger" in config.keys():
+                # Update location
+                self.hunger = config["hunger"]
+            # Check if location config is passed
+            if "safety" in config.keys():
+                # Update location
+                self.safety = config["safety"]
+            # Check if location config is passed
+            if "movementLimit" in config.keys():
+                # Update location
+                self.movementLimit = config["movementLimit"]
+        # TODO: throw type mismatch error
+        # else:
+
     # Function to get player id
     def getId(self):
         """Return player id."""
