@@ -322,6 +322,14 @@ class Ecosystem:
         """Call function to reset food on grid and remove players who do not meet end conditions."""
         # Call function to reset food on grid
         self.grid.resetFood()
+        # Iterate over all players
+        for player in self.players:
+            # Check if player is hungry or if player is in an unsafe cell
+            if not player.getHungerStatus() or player.getSafetyStatus():
+                # Get player location
+                location = player.getLocation()
+                # Remove player from grid
+                self.grid.grid[location[0]][location[1]].removePlayer(player.getId())
         # Remove hungry players
         self.players = [player for player in self.players if not player.getHungerStatus()]
         # Remove players in unsafe cells
