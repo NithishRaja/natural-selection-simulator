@@ -42,6 +42,9 @@ class Ecosystem:
         # Initialise grid with grid size
         self.grid = Grid(self.gridSize)
 
+        # Initialise a lock for grid
+        self.gridLock = threading.Semaphore()
+
         # Initialise food limit
         self.foodLimit = gridConfig["foodLimit"]
 
@@ -73,8 +76,12 @@ class Ecosystem:
         player.updateLocation(coordinate)
         # Add player to players array
         self.players.append(player)
+        # Acquire lock
+        self.gridLock.acquire()
         # Add player to coordinate
         self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
+        # Release lock
+        self.gridLock.release()
 
     # Function to get player target
     def getTarget(self, hungerStatus, safetyStatus):
@@ -111,8 +118,12 @@ class Ecosystem:
         targetLocation = None
         # Check if target is among valid targets
         if target in ["food", "home"]:
+            # Acquire lock
+            self.gridLock.acquire()
             # Get snapshot of grid
             snapshot = self.grid.getSnapshot(target)
+            # Release lock
+            self.gridLock.release()
             # Check if target is food
             if target == "food":
                 # Initialise search
@@ -166,8 +177,12 @@ class Ecosystem:
         """
         # Check if target is among valid targets
         if target in ["all", "food", "home"]:
+            # Acquire lock
+            self.gridLock.acquire()
             # Get snapshot of grid
             snapshot = self.grid.getSnapshot(target)
+            # Release lock
+            self.gridLock.release()
             # Print a divider
             print("---###---")
             # Iterate over each row
@@ -184,8 +199,12 @@ class Ecosystem:
     # Function to write snapshot of grid to log file
     def logGrid(self):
         """Get snapshot of grid and write it to log file."""
+        # Acquire lock
+        self.gridLock.acquire()
         # Get snapshot of grid
         snapshot = self.grid.getSnapshot("all")
+        # Release lock
+        self.gridLock.release()
         # open file
         file = open(os.path.join(self.currentLogDir, "grid"), "a")
         # Iterate over each row
@@ -270,6 +289,8 @@ class Ecosystem:
             file.close()
             # Check if new location matches current location
             if not newLocation == currentLocation:
+                # Acquire lock
+                self.gridLock.acquire()
                 # Move player
                 self.grid.movePlayer(playerId, currentLocation, newLocation)
                 # Check if cell is safe
@@ -287,6 +308,8 @@ class Ecosystem:
                         self.grid.grid[newLocation[0]][newLocation[1]].modifyFoodCount("decrement")
                         # Update player's hunger status
                         player.updateHungerStatus(False)
+                # Release lock
+                self.gridLock.release()
             # Check if hunger is False and safety is True
             if not player.getHungerStatus() and player.getSafetyStatus():
                 # Break from loop
@@ -303,8 +326,12 @@ class Ecosystem:
     # Function to perfrom day activities
     def beginDay(self):
         """Call functions to initialise food, assign threads and start threads."""
+        # Acquire lock
+        self.gridLock.acquire()
         # Initialise food on grid
         self.grid.initialiseFood(self.foodLimit)
+        # Release lock
+        self.gridLock.release()
         # Log grid state to file
         self.logGrid()
         # Call function to assign threads to players
@@ -320,16 +347,24 @@ class Ecosystem:
     # Function to perform night activities
     def beginNight(self):
         """Call function to reset food on grid and remove players who do not meet end conditions."""
+        # Acquire lock
+        self.gridLock.acquire()
         # Call function to reset food on grid
         self.grid.resetFood()
+        # Release lock
+        self.gridLock.release()
         # Iterate over all players
         for player in self.players:
             # Check if player is hungry or if player is in an unsafe cell
-            if not player.getHungerStatus() or player.getSafetyStatus():
+            if player.getHungerStatus() or not player.getSafetyStatus():
                 # Get player location
                 location = player.getLocation()
+                # Acquire lock
+                self.gridLock.acquire()
                 # Remove player from grid
                 self.grid.grid[location[0]][location[1]].removePlayer(player.getId())
+                # Release lock
+                self.gridLock.release()
         # Remove hungry players
         self.players = [player for player in self.players if not player.getHungerStatus()]
         # Remove players in unsafe cells
@@ -351,8 +386,12 @@ class Ecosystem:
             self.currentLogDir = os.path.join(self.baseLogDir, "day"+str(i))
             # Create a directory for logging
             os.makedirs(self.currentLogDir)
+            # Acquire lock
+            self.gridLock.acquire()
             # Update log directory path in grid
             self.grid.updateLogDirectoryLocation(self.currentLogDir)
+            # Release lock
+            self.gridLock.release()
             print("Day "+str(i))
             # Call function to begin day
             self.beginDay()
