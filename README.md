@@ -6,7 +6,10 @@
 ## Editing code
 
 * `index.py` is the entry file
-* Code for the grid is in `grid.py`
+* Logic for player grid interaction is in `ecosystem.py` file
+* Code for the grid is in `grid/grid.py`
+* The grid consists of multiple cells
+* Code for cells is in `grid/cell.py`
 * Code for players is in `player.py`
 * The search algorithm used is in `search.py`
 
@@ -17,9 +20,15 @@
 
 ## Logging
 
-* grid state for each day is logged inside **logging/day{day no}**
-* player movements for each day is logged inside **logging/day{day no}/{player id}**
+* Grid state for each day is logged inside **logging/day{day no}/grid**
+* All movements in the grid is logged inside **logging/day{day no}/gridMovements** in order of their occurrence
+* Player movements for each day is logged inside **logging/day{day no}/{player id}**
 
 ## Features
 
-* Currently a new grid is being worked on where all cells are objects instead of some being strings and others being arrays
+* Threads are assigned a player and has to move player to collect food and return back to a safe cell
+* Player movements are limited by vision limit, movement limit and recharge duration
+* Vision limit - puts a limit on the search radius
+* Movement limit - limits the number of steps taken by the player
+* Recharge duration - duration for which player has to wait after each movement
+* If target cannot be located, a random target is chosen and search for target continues at each step
