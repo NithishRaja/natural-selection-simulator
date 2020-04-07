@@ -76,23 +76,23 @@ class Player:
                 self.location = config["location"]
             # Check if hunger status is passed
             if "hunger" in config.keys():
-                # Update location
+                # Update hunger status
                 self.hunger = config["hunger"]
             # Check if safety status is passed
             if "safety" in config.keys():
-                # Update location
+                # Update safety status
                 self.safety = config["safety"]
             # Check if movement limit is passed
             if "movementLimit" in config.keys():
-                # Update location
+                # Update movement limit
                 self.movementLimit = config["movementLimit"]
             # Check if vision limit is passed
             if "visionLimit" in config.keys():
-                # Update location
+                # Update vision limit
                 self.visionLimit = config["visionLimit"]
             # Check if recharge duration is passed
             if "rechargeDuration" in config.keys():
-                # Update location
+                # Update recharge duration
                 self.rechargeDuration = config["rechargeDuration"]
         # TODO: throw type mismatch error
         # else:
