@@ -38,6 +38,9 @@ class Player:
         # Set vision limit
         self.visionLimit = config["visionLimit"]
 
+        # Set recharge duration
+        self.rechargeDuration = config["rechargeDuration"]
+
     # Function to get player configuration
     def getConfig(self):
         """Return a dictionary with all player configuration."""
@@ -53,6 +56,8 @@ class Player:
         config["movementLimit"] = self.movementLimit
         # Add vision limit
         config["visionLimit"] = self.visionLimit
+        # Add recharge duration
+        config["rechargeDuration"] = self.rechargeDuration
         # Return config
         return config
 
@@ -85,6 +90,10 @@ class Player:
             if "visionLimit" in config.keys():
                 # Update location
                 self.visionLimit = config["visionLimit"]
+            # Check if recharge duration is passed
+            if "rechargeDuration" in config.keys():
+                # Update location
+                self.rechargeDuration = config["rechargeDuration"]
         # TODO: throw type mismatch error
         # else:
 
@@ -159,3 +168,8 @@ class Player:
     def getVisionLimit(self):
         """Return vision limit value."""
         return self.visionLimit
+
+    # Function to get recharge duration
+    def getRechargeDuration(self):
+        """Return recharge duration value."""
+        return self.rechargeDuration

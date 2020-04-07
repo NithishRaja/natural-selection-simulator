@@ -4,5 +4,6 @@
   "hunger" : true,
   "safety" : true,
   "movementLimit" : 10,
-  "visionLimit" : 2
+  "visionLimit" : 2,
+  "rechargeDuration" : 1
 }

@@ -316,6 +316,8 @@ class Ecosystem:
             if not player.getHungerStatus() and player.getSafetyStatus():
                 # Break from loop
                 break
+            # Wait till recharge duration ends
+            time.sleep(player.getRechargeDuration())
 
     # Function to assign thread to each player
     def assignThreads(self):
