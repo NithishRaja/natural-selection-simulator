@@ -107,12 +107,13 @@ class Ecosystem:
         return target
 
     # Function to get player target
-    def getTargetLocation(self, currentLocation, target):
+    def getTargetLocation(self, currentLocation, target, visionLimit):
         """Get snapshot of grid and call search function to locate target.
 
         Keyword arguments:
         currentLocation -- tuple
         target -- string in 'food' or 'home'
+        visionLimit -- integer
         """
         # Initialise target
         targetLocation = None
@@ -127,10 +128,10 @@ class Ecosystem:
             # Check if target is food
             if target == "food":
                 # Initialise search
-                search = Search(snapshot, currentLocation, "F", None)
+                search = Search(snapshot, currentLocation, "F", visionLimit)
             elif target == "home":
                 # Initialise search
-                search = Search(snapshot, currentLocation, "H", None)
+                search = Search(snapshot, currentLocation, "H", visionLimit)
             # Get target location
             targetLocation = search.locateTarget()
         # TODO: throw error (invalid target)
@@ -227,13 +228,14 @@ class Ecosystem:
         return coordinates
 
     # Function to calculate player's next move
-    def calculateNextMove(self, currentLocation, hungerStatus, safetyStatus):
+    def calculateNextMove(self, currentLocation, hungerStatus, safetyStatus, visionLimit):
         """Calculate player's target and its current location. Return step to move towards target.
 
         Keyword arguments:
         currentLocation -- tuple
         hungerStatus -- boolean
         safetyStatus -- boolean
+        visionLimit -- integer
         """
         # Initialise new location
         newLocation = currentLocation
@@ -246,7 +248,7 @@ class Ecosystem:
             # Check if player target is not None
             if not target == None:
                 # Get player target location
-                targetLocation = self.getTargetLocation(currentLocation, target)
+                targetLocation = self.getTargetLocation(currentLocation, target, visionLimit)
                 # Check if target location is None
                 if targetLocation == None:
                     # Call function to get randon coordinates
@@ -274,7 +276,7 @@ class Ecosystem:
             # Get player current location
             currentLocation = player.getLocation()
             # Call function to get new location to move to
-            targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus())
+            targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus(), player.getVisionLimit())
             # Open file to log player movements
             file = open(os.path.join(self.currentLogDir, playerId), "a")
             # Prepare string to write to log file

@@ -35,6 +35,9 @@ class Player:
         # Set movement limit
         self.movementLimit = config["movementLimit"]
 
+        # Set vision limit
+        self.visionLimit = config["visionLimit"]
+
     # Function to get player configuration
     def getConfig(self):
         """Return a dictionary with all player configuration."""
@@ -48,6 +51,8 @@ class Player:
         config["safety"] = self.safety
         # Add movement limit
         config["movementLimit"] = self.movementLimit
+        # Add vision limit
+        config["visionLimit"] = self.visionLimit
         # Return config
         return config
 
@@ -76,6 +81,10 @@ class Player:
             if "movementLimit" in config.keys():
                 # Update location
                 self.movementLimit = config["movementLimit"]
+            # Check if location config is passed
+            if "visionLimit" in config.keys():
+                # Update location
+                self.visionLimit = config["visionLimit"]
         # TODO: throw type mismatch error
         # else:
 
@@ -145,3 +154,8 @@ class Player:
     def getMovementLimit(self):
         """Return movement limit value."""
         return self.movementLimit
+
+    # Function to get player vision limit
+    def getVisionLimit(self):
+        """Return vision limit value."""
+        return self.visionLimit

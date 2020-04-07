@@ -3,5 +3,6 @@
   "location" : null,
   "hunger" : true,
   "safety" : true,
-  "movementLimit" : 10
+  "movementLimit" : 10,
+  "visionLimit" : 2
 }
