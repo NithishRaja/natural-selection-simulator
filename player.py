@@ -69,19 +69,19 @@ class Player:
             if "location" in config.keys():
                 # Update location
                 self.location = config["location"]
-            # Check if location config is passed
+            # Check if hunger status is passed
             if "hunger" in config.keys():
                 # Update location
                 self.hunger = config["hunger"]
-            # Check if location config is passed
+            # Check if safety status is passed
             if "safety" in config.keys():
                 # Update location
                 self.safety = config["safety"]
-            # Check if location config is passed
+            # Check if movement limit is passed
             if "movementLimit" in config.keys():
                 # Update location
                 self.movementLimit = config["movementLimit"]
-            # Check if location config is passed
+            # Check if vision limit is passed
             if "visionLimit" in config.keys():
                 # Update location
                 self.visionLimit = config["visionLimit"]
