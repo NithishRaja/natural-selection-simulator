@@ -57,70 +57,38 @@ class Search:
         """Return target coordinates closest to location."""
         # Initialise target location
         targetLocation = None
-        # Iterate from 0 to radius
+        # Initialise array to hold coordinates of cells to search
+        searchTargets = []
+        # Append current location to search targets
+        searchTargets.append(self.location)
+        # Iterate till search radius is reached
         for i in range(self.radius+1):
-            # Calculate search limits
-            x_max = self.location[0] + i if self.location[0] + i < self.gridSize else self.gridSize - 1
-            x_min = self.location[0] - i if self.location[0] > i else 0
-            y_max = self.location[1] + i if self.location[1] + i < self.gridSize else self.gridSize - 1
-            y_min = self.location[1] - i if self.location[1] > i else 0
-            # Check top left edge for target
-            if self.grid[x_min][y_min] == self.target:
-                # Set target location
-                targetLocation = (x_min, y_min)
-                # Break from loop
-                break
-            # Check top right edge for target
-            if self.grid[x_min][y_max] == self.target:
-                # Set target location
-                targetLocation = (x_min, y_max)
-                # Break from loop
-                break
-            # Check bottom left edge for target
-            if self.grid[x_max][y_min] == self.target:
-                # Set target location
-                targetLocation = (x_max, y_min)
-                # Break from loop
-                break
-            # Check bottom right edge for target
-            if self.grid[x_max][y_max] == self.target:
-                # Set target location
-                targetLocation = (x_max, y_max)
-                # Break from loop
-                break
-            # Calculate limits
-            lowerLimitY = self.location[1]-(i-1) if self.location[1] > (i-1) else 0
-            upperLimitY = self.location[1]+(i-1) if self.location[1]+(i-1) < self.gridSize else self.gridSize - 1
-            # Check cells in top and bottom edge
-            for j in range(lowerLimitY, upperLimitY+1):
-                if self.grid[x_min][j] == self.target:
-                    # Set target location
-                    targetLocation = (x_min, j)
+            # Iterate over all elemnts in search targets
+            for coordinate in searchTargets:
+                # Check if target exists in current coordinate
+                if self.grid[coordinate[0]][coordinate[1]] == self.target:
+                    # Update target location
+                    targetLocation = coordinate
                     # Break from loop
                     break
-                if self.grid[x_max][j] == self.target:
-                    # Set target location
-                    targetLocation = (x_max, j)
-                    # Break from loop
-                    break
-            # Calculate limits
-            lowerLimitX = self.location[0]-(i-1) if self.location[0] > (i-1) else 0
-            upperLimitX = self.location[0]+(i-1) if self.location[0]+(i-1) < self.gridSize else self.gridSize - 1
-            # Check cells in left edge
-            for j in range(lowerLimitX, upperLimitX+1):
-                if self.grid[j][y_min] == self.target:
-                    # Set target location
-                    targetLocation = (j, y_min)
-                    # Break from loop
-                    break
-                if self.grid[j][y_max] == self.target:
-                    # Set target location
-                    targetLocation = (j, y_max)
-                    # Break from loop
-                    break
-            # Check if target location is obtained
-            if not targetLocation == None:
-                # Break from loop
-                break
+            # Empty search targets
+            searchTargets = []
+            # Calculate minimum and maximum coordinate values of neighbour cells
+            x_max = self.location[0] + 1 if self.location[0] + 1 < self.gridSize else self.gridSize - 1
+            x_min = self.location[0] - 1 if self.location[0] > 1 else 0
+            y_max = self.location[1] + 1 if self.location[1] + 1 < self.gridSize else self.gridSize - 1
+            y_min = self.location[1] - 1 if self.location[1] > 1 else 0
+            # Iterate over all neighbour cells above and below
+            for y in range(y_min, y_max+1):
+                # Add neighbour cells below coordinate to search targets
+                searchTargets.append((x_min, y))
+                # Add neighbour cells below coordinate to search targets
+                searchTargets.append((x_max, y))
+            # Iterate over all neighbour cells to left and right
+            for x in range(x_min+1, x_max):
+                # Add neighbour cells to left of coordinate to search targets
+                searchTargets.append((x, y_min))
+                # Add neighbour cells to right of coordinate to search targets
+                searchTargets.append((x, y_max))
         # Return target
         return targetLocation
