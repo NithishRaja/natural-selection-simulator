@@ -17,6 +17,7 @@ from grid.grid import Grid
 from ecosystem.getTarget import getTarget
 from ecosystem.getNextStep import getNextStep
 from ecosystem.getRandomCoordinates import getRandomCoordinates
+from ecosystem.writeLogs import writeLogs
 
 # Initialise class
 class Ecosystem:
@@ -155,18 +156,14 @@ class Ecosystem:
         snapshot = self.grid.getSnapshot("all")
         # Release lock
         self.gridLock.release()
-        # open file
-        file = open(os.path.join(self.currentLogDir, "grid"), "a")
         # Iterate over each row
         for i in range(self.gridSize):
             # Iterate over each column
             for j in range(self.gridSize):
                 # Print cell
-                file.write(str(snapshot[i][j])+",")
+                writeLogs(self.currentLogDir, "grid", str(snapshot[i][j])+",")
             # Enter new line for each row
-            file.write("\n")
-        # Close file
-        file.close()
+            writeLogs(self.currentLogDir, "grid", "\n")
 
     # Function to calculate player's next move
     def calculateNextMove(self, currentLocation, hungerStatus, safetyStatus, visionLimit):
@@ -218,8 +215,6 @@ class Ecosystem:
             currentLocation = player.getLocation()
             # Call function to get new location to move to
             targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus(), player.getVisionLimit())
-            # Open file to log player movements
-            file = open(os.path.join(self.currentLogDir, playerId), "a")
             # Prepare string to write to log file
             logString = "hunger: "+str(player.getHungerStatus())
             logString = logString +", safety: "+str(player.getHungerStatus())
@@ -227,9 +222,7 @@ class Ecosystem:
             logString = logString +", targetLocation: ("+str(targetLocation[0])+", "+str(targetLocation[1])+"), "
             logString = logString +", newLocation: ("+str(newLocation[0])+", "+str(newLocation[1])+")\n"
             # Write player state to file
-            file.write(logString)
-            # Close file
-            file.close()
+            writeLogs(self.currentLogDir, playerId, logString)
             # Check if new location matches current location
             if not newLocation == currentLocation:
                 # Acquire lock
