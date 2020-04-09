@@ -14,6 +14,9 @@ import os
 from player import Player
 from search import Search
 from grid.grid import Grid
+from ecosystem.getTarget import getTarget
+from ecosystem.getNextStep import getNextStep
+from ecosystem.getRandomCoordinates import getRandomCoordinates
 
 # Initialise class
 class Ecosystem:
@@ -84,29 +87,6 @@ class Ecosystem:
         self.gridLock.release()
 
     # Function to get player target
-    def getTarget(self, hungerStatus, safetyStatus):
-        """Get player target based on player status.
-
-        Keyword arguments:
-        hungerStatus -- boolean
-        safetyStatus -- boolean
-        """
-        # Initialise target
-        target = None
-        # Check if hungerStatus and safetyStatus are boolean
-        if type(hungerStatus) == type(True) and type(safetyStatus) == type(True):
-            # Check hunger status of player
-            if hungerStatus:
-                # Set player target to food
-                target = "food"
-            # Check safety status of player
-            elif not safetyStatus:
-                # Set player target to home
-                target = "home"
-        # Return target
-        return target
-
-    # Function to get player target
     def getTargetLocation(self, currentLocation, target, visionLimit):
         """Get snapshot of grid and call search function to locate target.
 
@@ -137,37 +117,6 @@ class Ecosystem:
         # TODO: throw error (invalid target)
         # else:
         return targetLocation
-
-    # Function to calculate player's next step to reach target
-    def getNextStep(self, currentLocation, targetLocation):
-        """Calculate next step to reach target.
-
-        Keyword arguments:
-        currentLocation -- tuple
-        targetLocation -- tuple
-        """
-        # Initialise tuple for new location
-        newLocation = [coordinate for coordinate in currentLocation]
-        # check if parameters passed are tuples
-        if type(currentLocation) == type((1,2)) and type(targetLocation) == type((1,2)):
-            # Check if x coordinate needs to be incremented
-            if currentLocation[0] < targetLocation[0]:
-                newLocation[0] = currentLocation[0]+1
-            # Check if x coordinate needs to be decremented
-            elif currentLocation[0] > targetLocation[0]:
-                newLocation[0] = currentLocation[0]-1
-            # Check if y coordinate needs to be incremented
-            if currentLocation[1] < targetLocation[1]:
-                newLocation[1] = currentLocation[1]+1
-            # Check if x coordinate needs to be decremented
-            elif currentLocation[1] > targetLocation[1]:
-                newLocation[1] = currentLocation[1]-1
-        # TODO: throw error (parameters must of type tuple)
-        # else:
-        # Convert new location to tuple
-        newLocation = tuple(newLocation)
-        # Return new location
-        return newLocation
 
     # Function to print snapshot of grid
     def displayGrid(self, target="all"):
@@ -219,14 +168,6 @@ class Ecosystem:
         # Close file
         file.close()
 
-    # Function to get random coordinates
-    def getRandomCoordinates(self):
-        """Generate random coordinates within grid."""
-        # Generate random coordinates
-        coordinates = (random.randint(0, self.gridSize-1), random.randint(0, self.gridSize-1))
-        # Return coordinates
-        return coordinates
-
     # Function to calculate player's next move
     def calculateNextMove(self, currentLocation, hungerStatus, safetyStatus, visionLimit):
         """Calculate player's target and its current location. Return step to move towards target.
@@ -244,7 +185,7 @@ class Ecosystem:
         # Check parameter types
         if type(currentLocation) == type((1,2)) and type(hungerStatus) == type(True) and type(safetyStatus) == type(True):
             # Get player target
-            target = self.getTarget(hungerStatus, safetyStatus)
+            target = getTarget(hungerStatus, safetyStatus)
             # Check if player target is not None
             if not target == None:
                 # Get player target location
@@ -252,9 +193,9 @@ class Ecosystem:
                 # Check if target location is None
                 if targetLocation == None:
                     # Call function to get randon coordinates
-                    targetLocation = self.getRandomCoordinates()
+                    targetLocation = getRandomCoordinates(self.gridSize)
                 # Get new location
-                newLocation = self.getNextStep(currentLocation, targetLocation)
+                newLocation = getNextStep(currentLocation, targetLocation)
         # Return new location
         return targetLocation, newLocation
 

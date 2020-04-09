@@ -4,7 +4,7 @@
 #
 
 # Local dependencies
-from ecosystem import Ecosystem
+from ecosystem.ecosystem import Ecosystem
 
 # Initialise ecosystem object
 eco = Ecosystem()
