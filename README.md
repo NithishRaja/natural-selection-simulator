@@ -26,6 +26,8 @@
 * The grid movements are written in the following format: playerId, current_x, current_y, new_x, new_y
 * Player movements for each day is logged inside **logging/day{day no}/{player id}**
 * Each player movement is written in the following format: hunger, safety, current_x, current_y, target_x, target_y, new_x, new_y
+* Player configurations is logged inside **logging/day{day no}/playerConfig**
+* Player configuration is written in the following format: id, movement limit, vision limit, recharge duration
 
 ## Features
 
