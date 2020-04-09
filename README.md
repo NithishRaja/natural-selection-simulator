@@ -21,8 +21,11 @@
 ## Logging
 
 * Grid state for each day is logged inside **logging/day{day no}/grid**
+* Grid state is written to file as a matrix with each cell indicating its status
 * All movements in the grid is logged inside **logging/day{day no}/gridMovements** in order of their occurrence
+* The grid movements are written in the following format: playerId, current_x, current_y, new_x, new_y
 * Player movements for each day is logged inside **logging/day{day no}/{player id}**
+* Each player movement is written in the following format: hunger, safety, current_x, current_y, target_x, target_y, new_x, new_y
 
 ## Features
 
