@@ -216,11 +216,11 @@ class Ecosystem:
             # Call function to get new location to move to
             targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus(), player.getVisionLimit())
             # Prepare string to write to log file
-            logString = "hunger: "+str(player.getHungerStatus())
-            logString = logString +", safety: "+str(player.getHungerStatus())
-            logString = logString +", currentLocation: ("+str(currentLocation[0])+", "+str(currentLocation[1])+"), "
-            logString = logString +", targetLocation: ("+str(targetLocation[0])+", "+str(targetLocation[1])+"), "
-            logString = logString +", newLocation: ("+str(newLocation[0])+", "+str(newLocation[1])+")\n"
+            logString = str(player.getHungerStatus())
+            logString = logString +","+str(player.getHungerStatus())
+            logString = logString +","+str(currentLocation[0])+","+str(currentLocation[1])
+            logString = logString +","+str(targetLocation[0])+","+str(targetLocation[1])
+            logString = logString +","+str(newLocation[0])+","+str(newLocation[1])+"\n"
             # Write player state to file
             writeLogs(self.currentLogDir, playerId, logString)
             # Check if new location matches current location
@@ -293,7 +293,6 @@ class Ecosystem:
         self.gridLock.release()
         # Iterate over all players
         for player in self.players:
-            # Check if player is hungry or if player is in an unsafe cell
             if player.getHungerStatus() or not player.getSafetyStatus():
                 # Get player location
                 location = player.getLocation()

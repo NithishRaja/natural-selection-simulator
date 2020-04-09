@@ -147,9 +147,9 @@ class Grid:
                 # Open file to log player movements
                 file = open(os.path.join(self.logDir, "gridMovements"), "a")
                 # Build string to write to log file
-                logString = "playerId: "+str(playerId)
-                logString = logString +", currentLocation: ("+str(currentLocation[0])+", "+str(currentLocation[1])+"), "
-                logString = logString +", newLocation: ("+str(newLocation[0])+", "+str(newLocation[1])+")\n"
+                logString = str(playerId)
+                logString = logString +","+str(currentLocation[0])+","+str(currentLocation[1])
+                logString = logString +","+str(newLocation[0])+","+str(newLocation[1])+"\n"
                 # Write player movement to file
                 file.write(logString)
         # TODO: throw error (parameter type mismatch)
