@@ -293,6 +293,14 @@ class Ecosystem:
         self.gridLock.release()
         # Iterate over all players
         for player in self.players:
+            # Initialise string with player movemment limit, vision limit and recharge duration
+            logString = str(player.getId())
+            logString = logString+","+str(player.getMovementLimit())
+            logString = logString+","+str(player.getVisionLimit())
+            logString = logString+","+str(player.getRechargeDuration())+"\n"
+            # Write log to file
+            writeLogs(self.currentLogDir, "playerConfig", logString)
+            # Check if player is hungry or is in unsafe cell
             if player.getHungerStatus() or not player.getSafetyStatus():
                 # Get player location
                 location = player.getLocation()
