@@ -215,7 +215,7 @@ class Ecosystem:
             targetLocation, newLocation = self.calculateNextMove(currentLocation, player.getHungerStatus(), player.getSafetyStatus(), player.getVisionLimit())
             # Prepare string to write to log file
             logString = str(player.getHungerStatus())
-            logString = logString +","+str(player.getHungerStatus())
+            logString = logString +","+str(player.getSafetyStatus())
             logString = logString +","+str(currentLocation[0])+","+str(currentLocation[1])
             logString = logString +","+str(targetLocation[0])+","+str(targetLocation[1])
             logString = logString +","+str(newLocation[0])+","+str(newLocation[1])+"\n"
