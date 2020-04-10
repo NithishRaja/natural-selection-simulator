@@ -344,3 +344,7 @@ class Ecosystem:
             self.beginDay()
             # Call function to begin night
             self.beginNight()
+            # If player array is empty, exit loop
+            if not len(self.players) > 0:
+                # Exit loop
+                break
