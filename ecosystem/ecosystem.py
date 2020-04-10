@@ -209,8 +209,6 @@ class Ecosystem:
         maxMoves = player.getMovementLimit()
         # Iterate till movement limit is reached
         for move in range(maxMoves):
-            # display grid
-            # self.displayGrid()
             # Get player current location
             currentLocation = player.getLocation()
             # Call function to get new location to move to
@@ -229,13 +227,8 @@ class Ecosystem:
                 self.gridLock.acquire()
                 # Move player
                 self.grid.movePlayer(playerId, currentLocation, newLocation)
-                # Check if cell is safe
-                if self.grid.grid[newLocation[0]][newLocation[1]].isSafe():
-                    # Update player safety status
-                    player.updateSafetyStatus(True)
-                else:
-                    # Update player safety status
-                    player.updateSafetyStatus(False)
+                # Update player safety status
+                player.updateSafetyStatus(self.grid.grid[newLocation[0]][newLocation[1]].isSafe())
                 # Check if player has reached target
                 if newLocation == targetLocation:
                     # Check if player is hungry and cell has food
@@ -339,7 +332,6 @@ class Ecosystem:
             self.grid.updateLogDirectoryLocation(self.currentLogDir)
             # Release lock
             self.gridLock.release()
-            # print("Day "+str(i))
             # Call function to begin day
             self.beginDay()
             # Call function to begin night
