@@ -210,7 +210,7 @@ class Ecosystem:
         # Iterate till movement limit is reached
         for move in range(maxMoves):
             # display grid
-            self.displayGrid()
+            # self.displayGrid()
             # Get player current location
             currentLocation = player.getLocation()
             # Call function to get new location to move to
@@ -293,6 +293,8 @@ class Ecosystem:
         self.gridLock.release()
         # Iterate over all players
         for player in self.players:
+            # Call function to update player parameters
+            player.updateParameters()
             # Initialise string with player movemment limit, vision limit and recharge duration
             logString = str(player.getId())
             logString = logString+","+str(player.getMovementLimit())
@@ -337,7 +339,7 @@ class Ecosystem:
             self.grid.updateLogDirectoryLocation(self.currentLogDir)
             # Release lock
             self.gridLock.release()
-            print("Day "+str(i))
+            # print("Day "+str(i))
             # Call function to begin day
             self.beginDay()
             # Call function to begin night

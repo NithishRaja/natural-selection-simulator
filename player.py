@@ -35,11 +35,20 @@ class Player:
         # Set movement limit
         self.movementLimit = config["movementLimit"]
 
+        # Set movement limit mutation chance
+        self.movementLimitMutationChance = config["movementLimitMutationChance"]
+
         # Set vision limit
         self.visionLimit = config["visionLimit"]
 
+        # Set vision limit mutation chance
+        self.visionLimitMutationChance = config["visionLimitMutationChance"]
+
         # Set recharge duration
         self.rechargeDuration = config["rechargeDuration"]
+
+        # Set recharge duration mutation chance
+        self.rechargeDurationMutationChance = config["rechargeDurationMutationChance"]
 
     # Function to get player configuration
     def getConfig(self):
@@ -96,6 +105,37 @@ class Player:
                 self.rechargeDuration = config["rechargeDuration"]
         # TODO: throw type mismatch error
         # else:
+
+    # Function to update player parameters
+    def updateParameters(self):
+        """Increment or decrement movement limit, viison limit and recharge duration based on mutation chances."""
+        # Roll chances for updating movement limit
+        if random.uniform(0, 1) < self.movementLimitMutationChance:
+            # Roll chances to decide between incrementation and decrementation
+            if random.randint(1, 2)%2 == 0:
+                # Increment parameter
+                self.movementLimit = self.movementLimit + 1
+            else:
+                # Decrement parameter
+                self.movementLimit = self.movementLimit - 1
+        # Roll chances for updating vision limit
+        if random.uniform(0, 1) < self.visionLimitMutationChance:
+            # Roll chances to decide between incrementation and decrementation
+            if random.randint(1, 2)%2 == 0:
+                # Increment parameter
+                self.visiontLimit = self.visionLimit + 1
+            else:
+                # Decrement parameter
+                self.visiontLimit = self.visionLimit - 1
+        # Roll chances for updating recharge duration
+        if random.uniform(0, 1) < self.rechargeDurationMutationChance:
+            # Roll chances to decide between incrementation and decrementation
+            if random.randint(1, 2)%2 == 0:
+                # Increment parameter
+                self.rechargeDuration = self.rechargeDuration + 0.1
+            else:
+                # Decrement parameter
+                self.rechargeDuration = self.rechargeDuration - 0.1
 
     # Function to get player id
     def getId(self):
