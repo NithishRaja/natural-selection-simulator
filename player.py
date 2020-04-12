@@ -58,12 +58,6 @@ class Player:
         """Return a dictionary with all player configuration."""
         # Initialise a dictionary
         config = {}
-        # Add location
-        config["location"] = self.location
-        # Add hunger status
-        config["hunger"] = self.hunger
-        # Add safety status
-        config["safety"] = self.safety
         # Add movement limit
         config["movementLimit"] = self.movementLimit
         # Add vision limit
@@ -82,18 +76,6 @@ class Player:
         """
         # Check if parameter passed is a dict
         if type(config) == type({}):
-            # Check if location config is passed
-            if "location" in config.keys():
-                # Update location
-                self.location = config["location"]
-            # Check if hunger status is passed
-            if "hunger" in config.keys():
-                # Update hunger status
-                self.hunger = config["hunger"]
-            # Check if safety status is passed
-            if "safety" in config.keys():
-                # Update safety status
-                self.safety = config["safety"]
             # Check if movement limit is passed
             if "movementLimit" in config.keys():
                 # Update movement limit

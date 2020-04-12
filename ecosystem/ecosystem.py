@@ -313,6 +313,19 @@ class Ecosystem:
         self.threads = []
         # Iterate over all players
         for player in self.players:
+            # Check if player should reproduce
+            if random.uniform(0,1) < player.getReproductionChance():
+                # Reset player reproduction chance
+                player.updateReproductionChance("reset")
+                # Get player config
+                config = player.getConfig()
+                # Create a new player object
+                newPlayer = self.initialisePlayer()
+                # Update new player config
+                newPlayer.updateConfig(config)
+            else:
+                # Increment reproduction chances
+                player.updateReproductionChance("increment")
             # Set player hunger status to True
             player.updateHungerStatus(True)
 
