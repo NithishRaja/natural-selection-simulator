@@ -217,6 +217,11 @@ class Player:
         """Return recharge duration value."""
         return self.rechargeDuration
 
+    # Function to return reproduction chance
+    def getReproductionChance(self):
+        """Return reproduction chance."""
+        return self.reproductionChance
+
     # Function to update reproduction chance
     def updateReproductionChance(self, action):
         """Increment reproduction chance by 10% or reset reproduction chance to 0 depending on the parameter passed.
