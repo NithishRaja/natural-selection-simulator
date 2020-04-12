@@ -32,6 +32,9 @@ class Player:
         # Initialise safety status
         self.safety = config["safety"]
 
+        # Set reproduction chance
+        self.reproductionChance = config["reproductionChance"]
+
         # Set movement limit
         self.movementLimit = config["movementLimit"]
 
@@ -213,3 +216,20 @@ class Player:
     def getRechargeDuration(self):
         """Return recharge duration value."""
         return self.rechargeDuration
+
+    # Function to update reproduction chance
+    def updateReproductionChance(self, action):
+        """Increment reproduction chance by 10% or reset reproduction chance to 0 depending on the parameter passed.
+
+        Keyword arguments:
+        action -- string in 'increment' or 'reset'
+        """
+        # Check if action is increment
+        if action == "increment":
+            # Check if reproduction chance is less than 1
+            if self.reproductionChance < 1:
+                # Increment reproduction chance
+                self.reproductionChance = self.reproductionChance + 0.1
+        elif action == "reset":
+            # Set reproduction chance to 0
+            self.reproductionChance = 0

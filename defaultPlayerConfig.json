@@ -3,6 +3,7 @@
   "location" : null,
   "hunger" : true,
   "safety" : true,
+  "reproductionChance" : 0.0,
   "movementLimit" : 10,
   "movementLimitMutationChance" : 0.2,
   "visionLimit" : 2,
