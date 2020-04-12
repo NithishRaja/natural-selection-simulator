@@ -123,7 +123,7 @@ class Player:
             # Roll chances to decide between incrementation and decrementation
             if random.randint(1, 2)%2 == 0:
                 # Increment parameter
-                self.visiontLimit = self.visionLimit + 1
+                self.visionLimit = self.visionLimit + 1
             else:
                 # Decrement parameter
                 self.visiontLimit = self.visionLimit - 1
