@@ -37,3 +37,5 @@
 * Movement limit - limits the number of steps taken by the player
 * Recharge duration - duration for which player has to wait after each movement
 * If target cannot be located, a random target is chosen and search for target continues at each step
+* Players have a chance to reproduce at end of each cycle
+* Chance for reproduction increases till player does reproduces, after reproduction the chance gets reset to 0
