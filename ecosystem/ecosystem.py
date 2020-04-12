@@ -70,10 +70,8 @@ class Ecosystem:
         player = Player()
         # Choose random coordinates
         coordinate = (random.randint(0, self.gridSize-1), random.randint(0, 1)*(self.gridSize-1))
-        # Toss to reverse coordinates
-        toss = random.randint(1,2)
-        # Check if coordinates should be reversed
-        if toss == 1:
+        # Toss to check if coordinates should be reversed
+        if random.randint(1,2) == 1:
             # Reverse coordinates
             coordinate = coordinate[::-1]
         # Update location for player
@@ -86,6 +84,8 @@ class Ecosystem:
         self.grid.grid[coordinate[0]][coordinate[1]].addPlayer(player)
         # Release lock
         self.gridLock.release()
+        # Return player
+        return player
 
     # Function to get player target
     def getTargetLocation(self, currentLocation, target, visionLimit):
