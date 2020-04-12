@@ -1,6 +1,6 @@
 {
   "gridSize" : 10,
-  "foodLimit" : 5,
+  "foodLimit" : 25,
   "noOfPlayers" : 4,
   "noOfDays" : 10,
   "baseLogDir" : "logging"

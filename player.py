@@ -126,7 +126,7 @@ class Player:
                 self.visionLimit = self.visionLimit + 1
             else:
                 # Decrement parameter
-                self.visiontLimit = self.visionLimit - 1
+                self.visionLimit = self.visionLimit - 1
         # Roll chances for updating recharge duration
         if random.uniform(0, 1) < self.rechargeDurationMutationChance:
             # Roll chances to decide between incrementation and decrementation
