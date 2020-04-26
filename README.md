@@ -18,6 +18,17 @@
 * Create a **logging** directory in root
 * Run `python index.py` in root
 
+## Configuration
+
+### Grid configuration
+
+* Configurations for the grid can be changed by modifying the **gridConfig.json** file
+* Parameters such as `gridSize`, `foodLimit`, `noOfPlayers`, `noOfDays`, `baseLogDir` can be updated in grid config
+
+### Player configuration
+
+* Player configurations can be changed by modifying the **defaultPlayerConfig.json** file
+
 ## Logging
 
 * Grid state for each day is logged inside **logging/day{day no}/grid**
@@ -39,3 +50,8 @@
 * If target cannot be located, a random target is chosen and search for target continues at each step
 * Players have a chance to reproduce at end of each cycle
 * Chance for reproduction increases till player does reproduces, after reproduction the chance gets reset to 0
+
+## Docker
+
+* The docker image can be found at [docker hub](https://hub.docker.com/repository/docker/nithishraja/natural_selection_simulator)
+* Instructions on how to use the image are also at [docker hub](https://hub.docker.com/repository/docker/nithishraja/natural_selection_simulator)
