@@ -51,6 +51,10 @@
 * Players have a chance to reproduce at end of each cycle
 * Chance for reproduction increases till player does reproduces, after reproduction the chance gets reset to 0
 
+## Visualiser
+
+* The code for visualiser can be found at [github](https://github.com/NithishRaja/natural-selection-visualizer)
+
 ## Docker
 
 * The docker image can be found at [docker hub](https://hub.docker.com/repository/docker/nithishraja/natural_selection_simulator)
